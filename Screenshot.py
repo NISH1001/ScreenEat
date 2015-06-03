@@ -19,11 +19,16 @@ SaveShot : accepts pixelbuffer and filename
 """
 class Screenshot(object):
     def __init__(self):
+        # active window param
+        self.screen = Gdk.Screen.get_default()
+        self.active_window = self.screen.get_active_window()
+        self.xactive, self.yactive, self.active_width, self.active_height = self.active_window.get_geometry()
+        # whole window
         self.root_window = Gdk.get_default_root_window()
         self.x, self.y, self.full_width, self.full_height = self.root_window.get_geometry()
 
-    def TakeShot(self, x,y, width, height):
-        pixel_buffer = Gdk.pixbuf_get_from_window(self.root_window, x, y, width, height)
+    def TakeShot(self, x,y, width, height, window):
+        pixel_buffer = Gdk.pixbuf_get_from_window(window, x, y, width, height)
         return pixel_buffer
 
     def SaveShot(self, pixel_buffer, filename):
@@ -43,7 +48,10 @@ class Screenshot(object):
 
 def main():
     shot = Screenshot()
-    pb = shot.TakeShot(0, 0, shot.full_width, shot.full_height)
+    # if full window
+    #pb = shot.TakeShot(0, 0, shot.full_width, shot.full_height, shot.root_window)
+    # if full active window
+    pb = shot.TakeShot(0,0, shot.active_width, shot.active_height, shot.active_window)
     shot.SaveShot(pb, "test")
 
 if __name__=="__main__":
