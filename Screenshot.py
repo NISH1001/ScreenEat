@@ -34,7 +34,7 @@ class Screenshot(object):
             if not pixel_buffer:
                 raise ManualError("no pixel buffer. please take screenshot at first")
             else:
-                pixel_buffer.savev(str(filename) + ".png", "png", (), ())
+                pixel_buffer.savev(str(filename) + ".jpg", "jpeg", (), ())
         except ManualError as err:
             err.display()
             return False
