@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-import base64, requests
+import base64, requests, datetime
 
 """
 An uploader class to upload image to imgur
@@ -15,6 +15,10 @@ class ImgurUploader():
         try:
             # upload route
             url = "https://api.imgur.com/3/image"
+            
+            # record time for debug purposes
+            prev_time = datetime.datetime.now()
+
             # POST with file data encoded in base64
             response = requests.post(
                 url,
@@ -29,8 +33,12 @@ class ImgurUploader():
 
             response_json = response.json()
 
+            delta_time = datetime.datetime.now()-prev_time
+
+            # return result
             result = {}
             result["success"] = response_json["success"]
+            result["time-in-seconds"] = delta_time.total_seconds()
             if (result["success"]):
                 result["link"] = response_json["data"]["link"]
             return result
@@ -40,6 +48,7 @@ class ImgurUploader():
 
 def main():
     imguru = ImgurUploader()
+    print("Uploading")
     result = imguru.Upload("test.png")
     print(result)
 
