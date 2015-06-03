@@ -1,7 +1,10 @@
+#!/usr/bin/env python3
+
 from gi.repository import Gdk
 import time
 import re
 
+# own exception class
 class ManualError(Exception):
     def __init__(self, args):
         self.args = args
@@ -9,6 +12,11 @@ class ManualError(Exception):
     def display(self):
         print(''.join(self.args))
 
+"""
+Simple screen shot class
+TakeShot : returns a pixel buffer
+SaveShot : accepts pixelbuffer and filename 
+"""
 class Screenshot(object):
     def __init__(self):
         self.root_window = Gdk.get_default_root_window()
