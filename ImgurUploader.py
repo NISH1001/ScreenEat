@@ -49,7 +49,7 @@ class ImgurUploader():
 def main():
     imguru = ImgurUploader()
     print("Uploading")
-    result = imguru.Upload("test.png")
+    result = imguru.Upload("test.jpg")
     print(result)
 
 
