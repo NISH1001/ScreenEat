@@ -27,6 +27,7 @@ class Screenshot(object):
         return pixel_buffer
 
     def SaveShot(self, pixel_buffer, filename):
+        # if no filename, create it using timestamp
         if not filename:
             filename = re.sub(r'\.', '', str(time.time()))
         try:
