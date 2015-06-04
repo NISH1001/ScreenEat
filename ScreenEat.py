@@ -28,7 +28,14 @@ class ScreenEat(Gtk.Window):
 
         button_copy = Gtk.Button(label="Copy Image To Clipboard")
         button_copy.props.margin_left = 10
+        #button_copy.set_sensitive(False)
+        button_copy.connect("clicked", self.ImageCopy, pixel_buffer)
         grid.attach(button_copy, 3, 0, 1, 1)
+
+    def ImageCopy(self, widget, pixbuf):
+        clipboard = Gtk.Clipboard()
+        clipboard.set_image(pixbuf)
+        clipboard.store()
 
 
 def main():
