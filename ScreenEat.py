@@ -28,7 +28,7 @@ class ScreenEat(Gtk.Window):
 
         button_copy = Gtk.Button(label="Copy Image To Clipboard")
         button_copy.props.margin_left = 10
-        grid.attach(button_copy, 2, 0, 1, 1)
+        grid.attach(button_copy, 3, 0, 1, 1)
 
 
 def main():
