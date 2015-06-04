@@ -1,5 +1,6 @@
 from gi.repository import Gtk, Gdk, GdkPixbuf
 import ConfigWindow
+from Screenshot import Screenshot
 
 class ScreenEat(Gtk.Window):
 
@@ -24,6 +25,7 @@ class ScreenEat(Gtk.Window):
 
         button_save = Gtk.Button(label="Save To File")
         button_save.props.margin_left = 10
+        button_save.connect("clicked", self.ImageSave, pixel_buffer) #pixel buffer is passed
         grid.attach(button_save, 2, 0, 1, 1)
 
         button_copy = Gtk.Button(label="Copy Image To Clipboard")
@@ -31,6 +33,24 @@ class ScreenEat(Gtk.Window):
         #button_copy.set_sensitive(False)
         button_copy.connect("clicked", self.ImageCopy, pixel_buffer)
         grid.attach(button_copy, 3, 0, 1, 1)
+
+    # for image saving
+    def ImageSave(self, widget, pixbuf):
+        dialog = Gtk.FileChooserDialog("Please choose a folder", self,
+                Gtk.FileChooserAction.SAVE,
+                (Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL,
+                    "save", Gtk.ResponseType.OK))
+        dialog.set_default_size(50,50)
+
+        response = dialog.run()
+        if response == Gtk.ResponseType.OK:
+            filename = dialog.get_filename()
+            print(dialog.get_filename() + ".jpg")
+            shot = Screenshot()
+            shot.SaveShot(pixbuf, filename)
+            dialog.destroy()
+        elif response == Gtk.ResponseType.CANCEL:
+            dialog.destroy()
 
     def ImageCopy(self, widget, pixbuf):
         clipboard = Gtk.Clipboard()
