@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 from gi.repository import Gtk, Gdk, GdkPixbuf
 import ConfigWindow
 from Screenshot import Screenshot
@@ -53,7 +55,7 @@ class ScreenEat(Gtk.Window):
             dialog.destroy()
 
     def ImageCopy(self, widget, pixbuf):
-        clipboard = Gtk.Clipboard()
+        clipboard = Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)
         clipboard.set_image(pixbuf)
         clipboard.store()
 

@@ -42,6 +42,7 @@ class ImgurUploader():
             if (result["success"]):
                 result["link"] = response_json["data"]["link"]
             return result
+
         except:
             return {'success': False}
         
