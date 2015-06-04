@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 from gi.repository import Gtk, Gdk, GdkPixbuf
 import ConfigWindow
 
@@ -33,7 +35,7 @@ class ScreenEat(Gtk.Window):
         grid.attach(button_copy, 3, 0, 1, 1)
 
     def ImageCopy(self, widget, pixbuf):
-        clipboard = Gtk.Clipboard()
+        clipboard = Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)
         clipboard.set_image(pixbuf)
         clipboard.store()
 
