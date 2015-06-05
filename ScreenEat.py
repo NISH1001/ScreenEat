@@ -18,12 +18,21 @@ class ScreenEat(Gtk.Window):
         grid.props.margin_bottom = 10
         self.add(grid)
 
-        # span : from col=0, row=0, to col=1, row=4
+        # take the shot immediately after invoke
+        shot = Screenshot()
+
+        ''' span : from col=0, row=0, to col=1, row=4 '''
         imageprev= Gtk.Label("imagepreview")
-        pixel_buffer = GdkPixbuf.Pixbuf.new_from_file("test.jpg")
+        #pixel_buffer = GdkPixbuf.Pixbuf.new_from_file("test.jpg")
+
+        #take shot
+        pixel_buffer = shot.TakeShot(0,0, shot.active_width, shot.active_height, shot.active_window)
         scaled = pixel_buffer.scale_simple(200,150, GdkPixbuf.InterpType.BILINEAR)
         image = Gtk.Image().new_from_pixbuf(scaled)
         grid.attach(image, 0, 0, 1, 4)
+
+        # save shot for future
+        shot.SaveShot(pixel_buffer, "test")
 
         button_save = Gtk.Button(label="Save To File")
         button_save.props.margin_left = 10
