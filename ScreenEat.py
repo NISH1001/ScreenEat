@@ -1,8 +1,11 @@
 #!/usr/bin/env python3
 
-from gi.repository import Gtk, Gdk, GdkPixbuf
+import platform
+from gi.repository import Gtk, Gdk, GdkPixbuf, GObject
 import ConfigWindow
 from Screenshot import Screenshot
+from threading import Thread
+from ImgurUploader import ImgurUploader
 
 class ScreenEat(Gtk.Window):
 
@@ -45,6 +48,72 @@ class ScreenEat(Gtk.Window):
         button_copy.connect("clicked", self.ImageCopy, pixel_buffer)
         grid.attach(button_copy, 3, 0, 1, 1)
 
+        
+        # create all 3 upload sections:
+
+        uploadSection1 = Gtk.Box(spacing = 10)
+        button_upload = Gtk.Button(label="Upload and Get URL")
+        button_upload.connect("clicked", self.Upload)
+        uploadSection1.pack_start(button_upload, expand=True, fill=True, padding=0)
+        uploadSection1.props.margin_left = 10
+        uploadSection1.props.margin_top = 10
+
+        uploadSection2 = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing = 10)
+        spinner = Gtk.Spinner()
+        spinner.start()
+        uploadSection2.add(spinner)
+        label_uploading = Gtk.Label("Uploading...")
+        uploadSection2.add(label_uploading)
+        uploadSection2.props.margin_left = 10
+        uploadSection2.props.margin_top = 10
+
+        uploadSection3 = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing = 10)
+        label_url = Gtk.Label("URL:...")
+        uploadSection3.add(label_url)
+        button_copy = Gtk.Button(label="Copy Url")
+        button_copy.connect("clicked", self.CopyUrl)
+        uploadSection3.add(button_copy)
+        uploadSection3.props.margin_left = 10
+        uploadSection3.props.margin_top = 10
+        
+        # attach the first upload section
+        grid.attach(uploadSection1, 2, 2, 2, 1)
+
+        self.grid = grid
+        self.uploadSection1 = uploadSection1
+        self.uploadSection2 = uploadSection2
+        self.uploadSection3 = uploadSection3
+        self.label_url = label_url
+
+        config = ConfigWindow.LoadConfig()
+        # if automatic upload then start uploading now
+        if (config["Automatic"]):
+            self.Upload(None)
+    
+    def CopyUrl(self, widget):
+        if (self.url):
+            clipboard = Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)
+            clipboard.set_text(self.url, -1)
+            clipboard.store()
+
+    def Upload(self, widget): 
+        self.grid.remove(self.uploadSection1)
+        self.grid.attach(self.uploadSection2, 2, 2, 2, 2)
+        self.grid.show_all()
+
+        thread = Thread(target=self.StartUploading)
+        thread.start()
+
+    def StartUploading(self):
+        uploader = ImgurUploader()
+        result = uploader.Upload("test.jpg")
+        print(result)
+        self.label_url.set_markup("URL: <a href='" + result['link']+"'>" + result['link'] + "</a>")
+        self.grid.remove(self.uploadSection2)
+        self.grid.attach(self.uploadSection3, 2, 2, 2, 2)
+        self.grid.show_all()
+        self.url = result['link']
+
     # for image saving
     def ImageSave(self, widget, pixbuf):
         dialog = Gtk.FileChooserDialog("Please choose a folder", self,
@@ -70,6 +139,10 @@ class ScreenEat(Gtk.Window):
 
 
 def main():
+    GObject.threads_init()
+    if platform.system() == 'Linux':
+        Gdk.threads_init()
+
     win = ScreenEat()
     win.connect("delete-event", Gtk.main_quit)
     win.show_all()
