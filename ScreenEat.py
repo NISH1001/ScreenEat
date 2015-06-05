@@ -32,10 +32,12 @@ class ScreenEat(Gtk.Window):
         arguments = sys.argv[1::]
         if "--active" in arguments:
             pixel_buffer = shot.TakeShot(0,0, shot.active_width, shot.active_height, shot.active_window)
+            aspect = shot.active_height/shot.active_width
         else:
             pixel_buffer = shot.TakeShot(0,0, shot.full_width, shot.full_height, shot.root_window)
+            aspect = shot.full_height/shot.full_width
 
-        scaled = pixel_buffer.scale_simple(200,150, GdkPixbuf.InterpType.BILINEAR)
+        scaled = pixel_buffer.scale_simple(200,200*aspect, GdkPixbuf.InterpType.BILINEAR)
         image = Gtk.Image().new_from_pixbuf(scaled)
         grid.attach(image, 0, 0, 1, 4)
 
