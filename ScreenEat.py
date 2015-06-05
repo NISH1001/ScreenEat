@@ -44,12 +44,14 @@ class ScreenEat(Gtk.Window):
         # save shot for future
         shot.SaveShot(pixel_buffer, "test")
 
-        button_save = Gtk.Button(label="Save To File")
+        #button_save = Gtk.Button(label="Save To File")
+        button_save = Gtk.Button(image=Gtk.Image(stock=Gtk.STOCK_SAVE_AS))
         button_save.props.margin_left = 10
         button_save.connect("clicked", self.ImageSave, pixel_buffer) #pixel buffer is passed
         grid.attach(button_save, 2, 0, 1, 1)
 
-        button_copy = Gtk.Button(label="Copy Image To Clipboard")
+        #button_copy = Gtk.Button(label="Copy Image To Clipboard")
+        button_copy = Gtk.Button(image=Gtk.Image(stock=Gtk.STOCK_COPY))
         button_copy.props.margin_left = 10
         #button_copy.set_sensitive(False)
         button_copy.connect("clicked", self.ImageCopy, pixel_buffer)
@@ -146,6 +148,7 @@ class ScreenEat(Gtk.Window):
             dialog.destroy()
         elif response == Gtk.ResponseType.CANCEL:
             dialog.destroy()
+        dialog.destroy()
 
     def ImageCopy(self, widget, pixbuf):
         clipboard = Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)
