@@ -1,0 +1,44 @@
+#!/usr/bin/env python3
+
+import subprocess
+import sys, os
+
+def NewKeybinding(name, command, binding):
+    
+    # defining keys & strings to be used
+    key = "org.gnome.settings-daemon.plugins.media-keys custom-keybindings"
+    subkey1 = key.replace(" ", ".")[:-1]+":"
+    item_s = "/"+key.replace(" ", "/").replace(".", "/")+"/"
+    firstname = "custom"
+
+    # get the current list of custom shortcuts
+    get = lambda cmd: subprocess.check_output(["/bin/bash", "-c", cmd]).decode("utf-8")
+    try:
+        current = eval(get("gsettings get "+key))
+    except:
+        current = []
+
+    # make sure the additional keybinding mention is no duplicate
+    n = 0
+    while True:
+        new = item_s+firstname+str(n)+"/"
+        if new in current:
+            n = n+1
+        else:
+            break
+    # add the new keybinding to the list
+    current.append(new)
+    
+    # create the shortcut, set the name, command and shortcut key
+    cmd0 = 'gsettings set '+key+' "'+str(current)+'"'
+    cmd1 = 'gsettings set '+subkey1+new+" name '" + name + "'"
+    cmd2 = 'gsettings set '+subkey1+new+" command \"" + command + "\""
+    cmd3 = 'gsettings set '+subkey1+new+" binding '"+binding+"'"
+    
+    for cmd in [cmd0, cmd1, cmd2, cmd3]:
+        subprocess.call(["/bin/bash", "-c", cmd])
+
+
+path = os.path.dirname(os.path.realpath(__file__))
+NewKeybinding("ScreenEat", "sh -c 'cd "+path+" && ./ScreenEat.py'", "<Control><Super>P")
+NewKeybinding("ScreenEat (Active)", "sh -c 'cd "+path+" && ./ScreenEat.py --active'", "<Control><Super>O")
