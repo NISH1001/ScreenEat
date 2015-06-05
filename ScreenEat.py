@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-import platform
+import platform, sys
 from gi.repository import Gtk, Gdk, GdkPixbuf, GObject
 import ConfigWindow
 from Screenshot import Screenshot
@@ -28,8 +28,13 @@ class ScreenEat(Gtk.Window):
         imageprev= Gtk.Label("imagepreview")
         #pixel_buffer = GdkPixbuf.Pixbuf.new_from_file("test.jpg")
 
-        #take shot
-        pixel_buffer = shot.TakeShot(0,0, shot.active_width, shot.active_height, shot.active_window)
+        # take shot, considering --active argument
+        arguments = sys.argv[1::]
+        if "--active" in arguments:
+            pixel_buffer = shot.TakeShot(0,0, shot.active_width, shot.active_height, shot.active_window)
+        else:
+            pixel_buffer = shot.TakeShot(0,0, shot.full_width, shot.full_height, shot.root_window)
+
         scaled = pixel_buffer.scale_simple(200,150, GdkPixbuf.InterpType.BILINEAR)
         image = Gtk.Image().new_from_pixbuf(scaled)
         grid.attach(image, 0, 0, 1, 4)

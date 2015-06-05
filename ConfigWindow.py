@@ -37,6 +37,7 @@ class ConfigWindow(Gtk.Window):
 
         grid = Gtk.Grid(row_homogeneous=True, column_homogeneous=True)
         grid.props.margin_top = 20
+        grid.props.margin_left=20
         grid.props.margin_right = 20
         grid.props.margin_bottom = 20
         self.add(grid)
