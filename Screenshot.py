@@ -49,9 +49,9 @@ class Screenshot(object):
 def main():
     shot = Screenshot()
     # if full window
-    #pb = shot.TakeShot(0, 0, shot.full_width, shot.full_height, shot.root_window)
+    pb = shot.TakeShot(0, 0, shot.full_width, shot.full_height, shot.root_window)
     # if full active window
-    pb = shot.TakeShot(0,0, shot.active_width, shot.active_height, shot.active_window)
+    #pb = shot.TakeShot(0,0, shot.active_width, shot.active_height, shot.active_window)
     shot.SaveShot(pb, "test")
 
 if __name__=="__main__":

@@ -96,6 +96,14 @@ class ScreenEat(Gtk.Window):
         # if automatic upload then start uploading now
         if (config["Automatic"]):
             self.Upload(None)
+
+        # connect the main window to keypress
+        self.connect("key-press-event", self.KeyPress)
+
+    def KeyPress(self, widget, event):
+        # if Escape -> 65307 is the code
+        if event.keyval==65307:
+            Gtk.main_quit()
     
     def CopyUrl(self, widget):
         if (self.url):
