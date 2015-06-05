@@ -37,7 +37,7 @@ class ScreenEat(Gtk.Window):
             pixel_buffer = shot.TakeShot(0,0, shot.full_width, shot.full_height, shot.root_window)
             aspect = shot.full_height/shot.full_width
 
-        scaled = pixel_buffer.scale_simple(200,200*aspect, GdkPixbuf.InterpType.BILINEAR)
+        scaled = pixel_buffer.scale_simple(300,300*aspect, GdkPixbuf.InterpType.BILINEAR)
         image = Gtk.Image().new_from_pixbuf(scaled)
         grid.attach(image, 0, 0, 1, 4)
 
