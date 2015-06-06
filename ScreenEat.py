@@ -57,7 +57,7 @@ class ScreenEat(Gtk.Window):
 
         #button_save = Gtk.Button(label="Save To File")
         button_save = Gtk.Button(image=Gtk.Image(stock=Gtk.STOCK_SAVE_AS))
-        button_save.set_tooltip_text("Save image as")
+        button_save.set_tooltip_text("Save image (ctrl+s)")
         button_save.connect("clicked", self.ImageSave, pixel_buffer) #pixel buffer is passed
         box_buttons.add(button_save)
 
