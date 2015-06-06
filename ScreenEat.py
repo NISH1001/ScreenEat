@@ -72,6 +72,7 @@ class ScreenEat(Gtk.Window):
         button_settings.connect("clicked", self.Configuration)
         box_buttons.add(button_settings)
 
+        box_buttons.props.halign = Gtk.Align.CENTER
         grid.attach(box_buttons, 2, 3, 3, 1)
 
         
@@ -80,7 +81,7 @@ class ScreenEat(Gtk.Window):
         uploadSection1 = Gtk.Box(spacing = 10)
         button_upload = Gtk.Button(label="Upload")
         button_upload.connect("clicked", self.Upload)
-        uploadSection1.pack_start(button_upload, expand=True, fill=True, padding=0)
+        uploadSection1.pack_start(button_upload, expand=True, fill=True, padding=5)
         uploadSection1.props.margin_left = 10
         uploadSection1.props.margin_top = 10
 
