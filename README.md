@@ -5,8 +5,8 @@ It is a simple tool to make sharing your desktop screenshots super easy.
 It offers you to share the screenshot by immediately uploading the snap to `imgur` (for now) and gives you an immediate sharable `url`  
 
 # Why?
-Reason is simple : `no local storage` `immediate share`
-Forget all those time-waste process of 
+Reason is simple : `no local storage` `immediate share`  
+Forget all those time-waste process of :  
 1. `printscreen`
 2. save to local storage
 3. send the file to someone you want to share
@@ -30,7 +30,7 @@ Into the cloned folder, run the `keybindings.py` script as :
 ```
 ./keybindings.py
 ```
-Once done our keybindings are :
+Once done our keybindings are :  
 * `ctrl+super+p` : whole desktop screenshot
 * `ctrl+super+o` : active window screenshot
 
