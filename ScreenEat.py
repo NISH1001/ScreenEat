@@ -26,7 +26,6 @@ class ScreenEat(Gtk.Window):
 
         ''' span : from col=0, row=0, to col=1, row=4 '''
         imageprev= Gtk.Label("imagepreview")
-        #pixel_buffer = GdkPixbuf.Pixbuf.new_from_file("test.jpg")
 
         # take shot, considering --active argument
         arguments = sys.argv[1::]
@@ -44,33 +43,34 @@ class ScreenEat(Gtk.Window):
         # save shot for future
         shot.SaveShot(pixel_buffer, "test")
 
+
+        box_buttons = Gtk.Box(spacing=10)
+        box_buttons.props.margin_top = 10
+
         #button_save = Gtk.Button(label="Save To File")
         button_save = Gtk.Button(image=Gtk.Image(stock=Gtk.STOCK_SAVE_AS))
-        button_save.props.margin_left = 10
         button_save.set_tooltip_text("save as")
         button_save.connect("clicked", self.ImageSave, pixel_buffer) #pixel buffer is passed
-        grid.attach(button_save, 2, 0, 1, 1)
+        box_buttons.add(button_save)
 
         #button_copy = Gtk.Button(label="Copy Image To Clipboard")
         button_copy = Gtk.Button(image=Gtk.Image(stock=Gtk.STOCK_COPY))
-        button_copy.props.margin_left = 10
         button_copy.set_tooltip_text("copy to clipboard")
-        #button_copy.set_sensitive(False)
         button_copy.connect("clicked", self.ImageCopy, pixel_buffer)
-        grid.attach(button_copy, 3, 0, 1, 1)
+        box_buttons.add(button_copy)
 
         button_settings = Gtk.Button(image=Gtk.Image(stock=Gtk.STOCK_PREFERENCES))
-        button_settings.props.margin_left = 10
         button_settings.set_tooltip_text("settings")
-        #button_settings.set_size_request(3,4)
         button_settings.connect("clicked", self.Configuration)
-        grid.attach(button_settings, 4,0, 1, 1)
+        box_buttons.add(button_settings)
+
+        grid.attach(box_buttons, 0, 4, 3, 1)
 
         
         # create all 3 upload sections:
 
         uploadSection1 = Gtk.Box(spacing = 10)
-        button_upload = Gtk.Button(label="Upload and Get URL")
+        button_upload = Gtk.Button(label="Upload")
         button_upload.connect("clicked", self.Upload)
         uploadSection1.pack_start(button_upload, expand=True, fill=True, padding=0)
         uploadSection1.props.margin_left = 10
@@ -93,9 +93,14 @@ class ScreenEat(Gtk.Window):
         uploadSection3.add(button_copy)
         uploadSection3.props.margin_left = 10
         uploadSection3.props.margin_top = 10
+
+        self.label_notfication = Gtk.Label("Click below to upload the screenshot")
+        self.label_notfication.props.margin_left = 10
+        self.label_notfication.props.width_chars = 32
+        grid.attach(self.label_notfication, 2, 0, 2, 1)
         
         # attach the first upload section
-        grid.attach(uploadSection1, 2, 2, 2, 1)
+        grid.attach(uploadSection1, 2, 1, 2, 2)
 
         self.grid = grid
         self.uploadSection1 = uploadSection1
@@ -130,7 +135,8 @@ class ScreenEat(Gtk.Window):
 
     def Upload(self, widget): 
         self.grid.remove(self.uploadSection1)
-        self.grid.attach(self.uploadSection2, 2, 2, 2, 2)
+        self.grid.attach(self.uploadSection2, 2, 1, 2, 2)
+        self.label_notfication.set_text("")
         self.grid.show_all()
 
         thread = Thread(target=self.StartUploading)
@@ -143,12 +149,14 @@ class ScreenEat(Gtk.Window):
         if (result['success']):
             self.label_url.set_markup("URL: <a href='" + result['link']+"'>" + result['link'] + "</a>")
             self.grid.remove(self.uploadSection2)
-            self.grid.attach(self.uploadSection3, 2, 2, 2, 2)
+            self.grid.attach(self.uploadSection3, 2, 1, 2, 2)
             self.grid.show_all()
             self.url = result['link']
+            self.label_notfication.set_text("Upload Successful !!")
         else:
+            self.label_notfication.set_text("Upload Failed !! Try again !")
             self.grid.remove(self.uploadSection2)
-            self.grid.attach(self.uploadSection1, 2, 2, 2, 1)
+            self.grid.attach(self.uploadSection1, 2, 1, 2, 2)
             self.grid.show_all()
 
     # for image saving
