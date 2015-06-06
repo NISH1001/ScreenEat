@@ -11,7 +11,7 @@ Forget all those time-waste process of :
 2. save to local storage
 3. send the file to someone you want to share
 
-Instead the process is simplified as: 
+Instead the process is simplified as:  
 1. hit those default keybindings of ours
 2. If `automatic upload` is enabled, a sharable `url` is provided immediately
 3. If `automatic upload` is disabled, you get a chance to upload or save it to local storage
