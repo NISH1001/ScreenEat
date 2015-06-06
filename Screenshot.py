@@ -46,7 +46,6 @@ class Screenshot(object):
         self.filename = filename+".jpg"
         return True
 
-
 def main():
     shot = Screenshot()
     # if full window

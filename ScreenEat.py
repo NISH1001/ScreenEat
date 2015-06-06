@@ -7,6 +7,18 @@ from Screenshot import Screenshot
 from threading import Thread
 from ImgurUploader import ImgurUploader
 
+"""
+Main GUI for our screenshot
+Contains Three section
+
+Section 1 : Image Preview of the shot
+Section 2 : Utilites like 'save image', 'copy to clipboard' , 'settings UI'
+Section 3 : Upload Section like 'upload the image', 'get the sharable link'
+
+If 'Automatic' upload is enabled :
+    screenshot is automatically uploaded and 
+    a sharable link is provided if successful
+"""
 class ScreenEat(Gtk.Window):
 
     def __init__(self):
@@ -43,13 +55,13 @@ class ScreenEat(Gtk.Window):
         else:
             scaled = pixel_buffer.scale_simple(300,300*imgheight/imgwidth, GdkPixbuf.InterpType.BILINEAR)
 
+        self.pixel_buffer = pixel_buffer
         image = Gtk.Image().new_from_pixbuf(scaled)
         grid.attach(image, 0, 0, 1, 4)
 
         # save shot for future
         shot.SaveShot(pixel_buffer, "")
         self.filename = shot.filename
-
 
         box_buttons = Gtk.Box(spacing=10)
         box_buttons.props.margin_top = 10
@@ -60,8 +72,6 @@ class ScreenEat(Gtk.Window):
         button_save.set_tooltip_text("Save image (ctrl+s)")
         button_save.connect("clicked", self.ImageSave, pixel_buffer) #pixel buffer is passed
         box_buttons.add(button_save)
-
-        self.pixel_buffer = pixel_buffer
 
         #button_copy = Gtk.Button(label="Copy Image To Clipboard")
         button_copy = Gtk.Button(image=Gtk.Image(stock=Gtk.STOCK_COPY))
@@ -77,9 +87,7 @@ class ScreenEat(Gtk.Window):
         box_buttons.props.halign = Gtk.Align.CENTER
         grid.attach(box_buttons, 2, 3, 3, 1)
 
-        
         # create all 3 upload sections:
-
         uploadSection1 = Gtk.Box(spacing = 10)
         button_upload = Gtk.Button(label="Upload")
         button_upload.connect("clicked", self.Upload)
@@ -139,10 +147,8 @@ class ScreenEat(Gtk.Window):
         ctrl = event.state & Gdk.ModifierType.CONTROL_MASK
         if keyname=="Escape":
             Gtk.main_quit()
-
         if ctrl and keyname=="s":
             self.ImageSave(widget, self.pixel_buffer)
-
     
     def CopyUrl(self, widget):
         if (self.url):
@@ -193,6 +199,7 @@ class ScreenEat(Gtk.Window):
             dialog.destroy()
         elif response == Gtk.ResponseType.CANCEL:
             dialog.destroy()
+
         dialog.destroy()
 
     def ImageCopy(self, widget, pixbuf):

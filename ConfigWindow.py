@@ -85,6 +85,5 @@ def main():
     win.show_all()
     Gtk.main()
 
-
 if __name__ == "__main__":
     main()
