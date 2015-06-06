@@ -26,6 +26,11 @@ def Nothing():
 
 ChangeHandler = Nothing
 
+"""
+A configuration/settings GUI
+Contains : 
+    'Automatic' upload enable/disable
+"""
 class ConfigWindow(Gtk.Window):
 
     def __init__(self):
