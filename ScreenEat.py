@@ -124,9 +124,8 @@ class ScreenEat(Gtk.Window):
 
     def Configuration(self, widget):
         win = ConfigWindow.ConfigWindow()
-        #win.connect("delete-event", Gtk.main_quit)
+        win.set_modal(True)
         win.show_all()
-        #Gtk.main()
 
     def KeyPress(self, widget, event):
         # if Escape -> 65307 is the code
