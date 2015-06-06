@@ -53,6 +53,7 @@ class ScreenEat(Gtk.Window):
 
         box_buttons = Gtk.Box(spacing=10)
         box_buttons.props.margin_top = 10
+        box_buttons.props.margin_left = 10
 
         #button_save = Gtk.Button(label="Save To File")
         button_save = Gtk.Button(image=Gtk.Image(stock=Gtk.STOCK_SAVE_AS))
@@ -71,7 +72,7 @@ class ScreenEat(Gtk.Window):
         button_settings.connect("clicked", self.Configuration)
         box_buttons.add(button_settings)
 
-        grid.attach(box_buttons, 0, 4, 3, 1)
+        grid.attach(box_buttons, 2, 3, 3, 1)
 
         
         # create all 3 upload sections:
