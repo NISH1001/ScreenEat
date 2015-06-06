@@ -43,6 +43,7 @@ class Screenshot(object):
         except ManualError as err:
             err.display()
             return False
+        self.filename = filename+".jpg"
         return True
 
 

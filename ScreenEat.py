@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-import platform, sys
+import platform, sys, os
 from gi.repository import Gtk, Gdk, GdkPixbuf, GObject
 import ConfigWindow
 from Screenshot import Screenshot
@@ -47,7 +47,8 @@ class ScreenEat(Gtk.Window):
         grid.attach(image, 0, 0, 1, 4)
 
         # save shot for future
-        shot.SaveShot(pixel_buffer, "test")
+        shot.SaveShot(pixel_buffer, "")
+        self.filename = shot.filename
 
 
         box_buttons = Gtk.Box(spacing=10)
@@ -149,7 +150,7 @@ class ScreenEat(Gtk.Window):
 
     def StartUploading(self):
         uploader = ImgurUploader()
-        result = uploader.Upload("test.jpg")
+        result = uploader.Upload(self.filename)
         print(result)
         if (result['success']):
             self.label_url.set_markup("URL: <a href='" + result['link']+"'>" + result['link'] + "</a>")
@@ -188,7 +189,6 @@ class ScreenEat(Gtk.Window):
         clipboard.set_image(pixbuf)
         clipboard.store()
 
-
 def main():
     GObject.threads_init()
     if platform.system() == 'Linux':
@@ -199,6 +199,10 @@ def main():
     win.show_all()
     Gtk.main()
 
+    try:
+        os.remove(win.filename)
+    except:
+        pass
 
 if __name__ == "__main__":
     main()
