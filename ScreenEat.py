@@ -69,7 +69,7 @@ class ScreenEat(Gtk.Window):
 
         #button_save = Gtk.Button(label="Save To File")
         button_save = Gtk.Button(image=Gtk.Image(stock=Gtk.STOCK_SAVE_AS))
-        button_save.set_tooltip_text("Save image (ctrl+s)")
+        button_save.set_tooltip_text("Save image (Ctrl+S)")
         button_save.connect("clicked", self.ImageSave, pixel_buffer) #pixel buffer is passed
         box_buttons.add(button_save)
 
@@ -184,22 +184,22 @@ class ScreenEat(Gtk.Window):
 
     # for image saving
     def ImageSave(self, widget, pixbuf):
-        dialog = Gtk.FileChooserDialog("Please choose a folder", self,
-                Gtk.FileChooserAction.SAVE,
-                (Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL,
-                    "save", Gtk.ResponseType.OK))
+        dialog = Gtk.FileChooserDialog("Please choose a folder", self, Gtk.FileChooserAction.SAVE,
+                    (Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL, "Save", Gtk.ResponseType.OK))
+
+        filter_jpg = Gtk.FileFilter()
+        filter_jpg.set_name("JPEG images")
+        filter_jpg.add_pattern("*.jpg")
+        dialog.add_filter(filter_jpg)
         dialog.set_default_size(50,50)
+        dialog.set_do_overwrite_confirmation(True)
 
         response = dialog.run()
         if response == Gtk.ResponseType.OK:
             filename = dialog.get_filename()
-            print(dialog.get_filename() + ".jpg")
+            print(dialog.get_filename())
             shot = Screenshot()
             shot.SaveShot(pixbuf, filename)
-            dialog.destroy()
-        elif response == Gtk.ResponseType.CANCEL:
-            dialog.destroy()
-
         dialog.destroy()
 
     def ImageCopy(self, widget, pixbuf):

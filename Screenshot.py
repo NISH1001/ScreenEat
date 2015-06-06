@@ -39,11 +39,11 @@ class Screenshot(object):
             if not pixel_buffer:
                 raise ManualError("no pixel buffer. please take screenshot at first")
             else:
-                pixel_buffer.savev(str(filename) + ".jpg", "jpeg", (), ())
+                pixel_buffer.savev(filename, "jpeg", (), ())
         except ManualError as err:
             err.display()
             return False
-        self.filename = filename+".jpg"
+        self.filename = filename
         return True
 
 def main():
@@ -52,7 +52,7 @@ def main():
     pb = shot.TakeShot(0, 0, shot.full_width, shot.full_height, shot.root_window)
     # if full active window
     #pb = shot.TakeShot(0,0, shot.active_width, shot.active_height, shot.active_window)
-    shot.SaveShot(pb, "test")
+    shot.SaveShot(pb, "test.jpg")
 
 if __name__=="__main__":
     main()
