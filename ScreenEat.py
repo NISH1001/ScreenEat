@@ -44,16 +44,27 @@ class ScreenEat(Gtk.Window):
         # save shot for future
         shot.SaveShot(pixel_buffer, "test")
 
-        button_save = Gtk.Button(label="Save To File")
+        #button_save = Gtk.Button(label="Save To File")
+        button_save = Gtk.Button(image=Gtk.Image(stock=Gtk.STOCK_SAVE_AS))
         button_save.props.margin_left = 10
+        button_save.set_tooltip_text("save as")
         button_save.connect("clicked", self.ImageSave, pixel_buffer) #pixel buffer is passed
         grid.attach(button_save, 2, 0, 1, 1)
 
-        button_copy = Gtk.Button(label="Copy Image To Clipboard")
+        #button_copy = Gtk.Button(label="Copy Image To Clipboard")
+        button_copy = Gtk.Button(image=Gtk.Image(stock=Gtk.STOCK_COPY))
         button_copy.props.margin_left = 10
+        button_copy.set_tooltip_text("copy to clipboard")
         #button_copy.set_sensitive(False)
         button_copy.connect("clicked", self.ImageCopy, pixel_buffer)
         grid.attach(button_copy, 3, 0, 1, 1)
+
+        button_settings = Gtk.Button(image=Gtk.Image(stock=Gtk.STOCK_PREFERENCES))
+        button_settings.props.margin_left = 10
+        button_settings.set_tooltip_text("settings")
+        #button_settings.set_size_request(3,4)
+        button_settings.connect("clicked", self.Configuration)
+        grid.attach(button_settings, 4,0, 1, 1)
 
         
         # create all 3 upload sections:
@@ -96,6 +107,20 @@ class ScreenEat(Gtk.Window):
         # if automatic upload then start uploading now
         if (config["Automatic"]):
             self.Upload(None)
+
+        # connect the main window to keypress
+        self.connect("key-press-event", self.KeyPress)
+
+    def Configuration(self, widget):
+        win = ConfigWindow.ConfigWindow()
+        #win.connect("delete-event", Gtk.main_quit)
+        win.show_all()
+        #Gtk.main()
+
+    def KeyPress(self, widget, event):
+        # if Escape -> 65307 is the code
+        if event.keyval==65307:
+            Gtk.main_quit()
     
     def CopyUrl(self, widget):
         if (self.url):
@@ -143,6 +168,7 @@ class ScreenEat(Gtk.Window):
             dialog.destroy()
         elif response == Gtk.ResponseType.CANCEL:
             dialog.destroy()
+        dialog.destroy()
 
     def ImageCopy(self, widget, pixbuf):
         clipboard = Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)

@@ -61,6 +61,14 @@ class ConfigWindow(Gtk.Window):
 
         self.set_default(okButton)
 
+        # connect the main window to keypress
+        self.connect("key-press-event", self.KeyPress)
+
+    def KeyPress(self, widget, event):
+        # if Escape -> 65307 is the code
+        if event.keyval==65307:
+            self.destroy()
+
     def Apply(self, w):
         config = {}
         config["Automatic"] = self.upload_type.get_active()
