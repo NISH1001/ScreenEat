@@ -1,5 +1,7 @@
 # ScreenEat
 
+Screenshots made delicious and easy
+
 ## What the heck is it?
 
 It is a simple tool to make sharing your desktop screenshots super easy.
@@ -42,8 +44,3 @@ Insize the newly created *ScreenEat* folder, run the `keybindings.py` script as 
 Once done, following keybindings are set:
 * `ctrl+super+p` : Take screenshot of the whole desktop
 * `ctrl+super+o` : Take screenshot of only the active window
-
-
-
-
-
