@@ -31,12 +31,18 @@ class ScreenEat(Gtk.Window):
         arguments = sys.argv[1::]
         if "--active" in arguments:
             pixel_buffer = shot.TakeShot(0,0, shot.active_width, shot.active_height, shot.active_window)
-            aspect = shot.active_height/shot.active_width
+            imgwidth = shot.active_width
+            imgheight = shot.active_height
         else:
             pixel_buffer = shot.TakeShot(0,0, shot.full_width, shot.full_height, shot.root_window)
-            aspect = shot.full_height/shot.full_width
+            imgwidth = shot.full_width
+            imgheight = shot.full_height
+        
+        if imgheight > imgwidth:
+            scaled = pixel_buffer.scale_simple(200*imgwidth/imgheight,200, GdkPixbuf.InterpType.BILINEAR)
+        else:
+            scaled = pixel_buffer.scale_simple(300,300*imgheight/imgwidth, GdkPixbuf.InterpType.BILINEAR)
 
-        scaled = pixel_buffer.scale_simple(300,300*aspect, GdkPixbuf.InterpType.BILINEAR)
         image = Gtk.Image().new_from_pixbuf(scaled)
         grid.attach(image, 0, 0, 1, 4)
 
@@ -49,18 +55,18 @@ class ScreenEat(Gtk.Window):
 
         #button_save = Gtk.Button(label="Save To File")
         button_save = Gtk.Button(image=Gtk.Image(stock=Gtk.STOCK_SAVE_AS))
-        button_save.set_tooltip_text("save as")
+        button_save.set_tooltip_text("Save image as")
         button_save.connect("clicked", self.ImageSave, pixel_buffer) #pixel buffer is passed
         box_buttons.add(button_save)
 
         #button_copy = Gtk.Button(label="Copy Image To Clipboard")
         button_copy = Gtk.Button(image=Gtk.Image(stock=Gtk.STOCK_COPY))
-        button_copy.set_tooltip_text("copy to clipboard")
+        button_copy.set_tooltip_text("Copy image to Clipboard")
         button_copy.connect("clicked", self.ImageCopy, pixel_buffer)
         box_buttons.add(button_copy)
 
         button_settings = Gtk.Button(image=Gtk.Image(stock=Gtk.STOCK_PREFERENCES))
-        button_settings.set_tooltip_text("settings")
+        button_settings.set_tooltip_text("Settings")
         button_settings.connect("clicked", self.Configuration)
         box_buttons.add(button_settings)
 
