@@ -1,4 +1,5 @@
 # ScreenEat
+Screenshots made delicious
 
 # What the heck is it?
 It is a simple tool to make sharing your desktop screenshots super easy.  
@@ -32,9 +33,14 @@ Into the cloned folder, run the `keybindings.py` script as :
 ```
 ./keybindings.py
 ```
+
+*No need to run this `keybindings.py` script again. The bindings are now global. No harm's done if you re-run it, by the way. *  
+
 Once done our keybindings are :  
 * `ctrl+super+p` : whole desktop screenshot
 * `ctrl+super+o` : active window screenshot
+
+
 
 
 
