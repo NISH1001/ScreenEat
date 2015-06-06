@@ -3,6 +3,8 @@
 from gi.repository import Gdk
 import time
 import re
+from os.path import expanduser
+import os
 
 # own exception class
 class ManualError(Exception):
@@ -35,6 +37,11 @@ class Screenshot(object):
         # if no filename, create it using timestamp
         if not filename:
             filename = re.sub(r'\.', '', str(time.time()))
+            folderpath = expanduser("~") +"/.ScreenEat/"
+            if not os.path.exists(folderpath):
+                os.makedirs(folderpath)
+                print(filename)
+            filename = folderpath + filename
         try:
             if not pixel_buffer:
                 raise ManualError("no pixel buffer. please take screenshot at first")
@@ -52,7 +59,7 @@ def main():
     pb = shot.TakeShot(0, 0, shot.full_width, shot.full_height, shot.root_window)
     # if full active window
     #pb = shot.TakeShot(0,0, shot.active_width, shot.active_height, shot.active_window)
-    shot.SaveShot(pb, "test.jpg")
+    shot.SaveShot(pb, "")
 
 if __name__=="__main__":
     main()
