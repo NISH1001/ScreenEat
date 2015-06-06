@@ -10,9 +10,9 @@ def LoadConfig():
     try:
         configstr = open("config.json").read()
         config = json.loads(configstr)
-        # if 'Automatic' key doesnt exit
-        if not "Automatic" in config:
-            config["Automatic"] = False
+        # if 'automatic' key doesnt exit
+        if not "automatic" in config:
+            config["automatic"] = False
     except:
         print("Couldn't load configuration file: config.json")
     return config
@@ -29,7 +29,7 @@ ChangeHandler = Nothing
 """
 A configuration/settings GUI
 Contains : 
-    'Automatic' upload enable/disable
+    'automatic' upload enable/disable
 """
 class ConfigWindow(Gtk.Window):
 
@@ -51,7 +51,7 @@ class ConfigWindow(Gtk.Window):
         check = Gtk.CheckButton("Automatic Upload")
         grid.attach(check, 0, 0, 1, 1)
         self.upload_type = check
-        self.upload_type.set_active(config["Automatic"])
+        self.upload_type.set_active(config["automatic"])
 
         okButton = Gtk.Button("Apply")
         okButton.props.margin_top = 10
@@ -76,7 +76,7 @@ class ConfigWindow(Gtk.Window):
 
     def Apply(self, w):
         config = {}
-        config["Automatic"] = self.upload_type.get_active()
+        config["automatic"] = self.upload_type.get_active()
         SaveConfig(config)
         ChangeHandler()
         self.close()

@@ -15,7 +15,7 @@ Section 1 : Image Preview of the shot
 Section 2 : Utilites like 'save image', 'copy to clipboard' , 'settings UI'
 Section 3 : Upload Section like 'upload the image', 'get the sharable link'
 
-If 'Automatic' upload is enabled :
+If 'automatic' upload is enabled :
     screenshot is automatically uploaded and 
     a sharable link is provided if successful
 """
@@ -129,7 +129,7 @@ class ScreenEat(Gtk.Window):
 
         config = ConfigWindow.LoadConfig()
         # if automatic upload then start uploading now
-        if (config["Automatic"]):
+        if (config["automatic"]):
             self.Upload(None)
 
         # connect the main window to keypress
