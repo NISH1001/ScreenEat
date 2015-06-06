@@ -1,40 +1,47 @@
 # ScreenEat
 
-# What the heck is it?
-It is a simple tool to make sharing your desktop screenshots super easy.  
-It offers you to share the screenshot by immediately uploading the snap to `imgur` (for now) and gives you an immediate sharable `url`  
+## What the heck is it?
 
-# Why?
-Reason is simple : `no local storage` `immediate share`  
-Forget all those time-waste process of :  
+It is a simple tool to make sharing your desktop screenshots super easy.
+It offers you to share the screenshot by immediately uploading the snap to web and gives you an immediate sharable *url*.
 
-1. `printscreen`  
-2. save to local storage  
-3. send the file to someone you want to share  
+> Currently, ScreenEat uses [**Imgur**](http://imgur.com/) to store the uploaded images, as it seems the most convenient option for now. This can change in future if problems arise.
 
-Instead the process is simplified as:  
+## Why use it?
 
-1. hit those default keybindings of ours  
-2. If `automatic upload` is enabled, a sharable `url` is provided immediately  
-3. If `automatic upload` is disabled, you get a chance to upload or save it to local storage  
+Reason is simple : *no local storage - immediate share*
 
-# Ok! I want to use it, but how?
+Forget the old time-wasting process of :
 
-### Clone this repo first
+1. Hitting `PrintScr`
+2. Saving screenshot to a local file
+3. Finally, uploading the file so that you may share it
 
-```
+Instead the process is simplified to **just hitting the default keybinding to take screenshot with our app**.
+
+- If *automatic upload* is enabled, a sharable *url* is provided immediately
+- If *automatic upload* is disabled, you can click the upload button and a sharable *url* is then provided
+
+You still get options to *save* a local copy and *copy* the screenshot image to clipboard.
+
+## Ok! I want to use it, but how?
+
+#### Clone this repo first
+
+```bash
 git clone https://github.com/NISH1001/ScreenEat.git
 ```
 
-### Our default key binding
-Into the cloned folder, run the `keybindings.py` script as : 
+#### Our default key binding
 
-```
+Insize the newly created *ScreenEat* folder, run the `keybindings.py` script as :
+
+```bash
 ./keybindings.py
 ```
-Once done our keybindings are :  
-* `ctrl+super+p` : whole desktop screenshot
-* `ctrl+super+o` : active window screenshot
+Once done, following keybindings are set:
+* `ctrl+super+p` : Take screenshot of the whole desktop
+* `ctrl+super+o` : Take screenshot of only the active window
 
 
 
