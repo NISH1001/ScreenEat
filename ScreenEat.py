@@ -115,11 +115,16 @@ class ScreenEat(Gtk.Window):
         uploader = ImgurUploader()
         result = uploader.Upload("test.jpg")
         print(result)
-        self.label_url.set_markup("URL: <a href='" + result['link']+"'>" + result['link'] + "</a>")
-        self.grid.remove(self.uploadSection2)
-        self.grid.attach(self.uploadSection3, 2, 2, 2, 2)
-        self.grid.show_all()
-        self.url = result['link']
+        if (result['success']):
+            self.label_url.set_markup("URL: <a href='" + result['link']+"'>" + result['link'] + "</a>")
+            self.grid.remove(self.uploadSection2)
+            self.grid.attach(self.uploadSection3, 2, 2, 2, 2)
+            self.grid.show_all()
+            self.url = result['link']
+        else:
+            self.grid.remove(self.uploadSection2)
+            self.grid.attach(self.uploadSection1, 2, 2, 2, 1)
+            self.grid.show_all()
 
     # for image saving
     def ImageSave(self, widget, pixbuf):
