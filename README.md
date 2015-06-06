@@ -73,3 +73,13 @@ The settings are stored in `config.json` file and can be changed manually or thr
 ##### Options available
 
 `automatic` : Set whether to automatic upload immediately after taking the screenshot
+
+----
+
+### Related Links
+
+Find more about this project at:
+
+- [http://code-momo.herokuapp.com/blog/post/screeneat-delicious-screenshots/](http://codingparadox.herokuapp.com/blog/detail/screeneat-delicious-screenshots)
+- [http://codingparadox.herokuapp.com/blog/detail/screeneat-delicious-screenshots](http://codingparadox.herokuapp.com/blog/detail/screeneat-delicious-screenshots)
+
