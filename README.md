@@ -34,7 +34,12 @@ You still get options to *save* a local copy and *copy* the screenshot image to 
 git clone https://github.com/NISH1001/ScreenEat.git
 ```
 
-> You need `python3` and `pygi` installed to use ScreenEat.
+> You need **Python3** and **PyGObject** installed to use ScreenEat. For debian systems, these can be installed using following bash command lines respectively:
+
+```bash
+sudo apt-get install python3
+sudo apt-get install python3-gi
+```
 
 #### Our default key binding
 

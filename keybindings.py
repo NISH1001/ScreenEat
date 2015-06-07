@@ -39,6 +39,13 @@ def NewKeybinding(name, command, binding):
         subprocess.call(["/bin/bash", "-c", cmd])
 
 
-path = os.path.dirname(os.path.realpath(__file__))
-NewKeybinding("ScreenEat", "sh -c 'cd "+path+" && ./ScreenEat.py'", "<Control><Super>P")
-NewKeybinding("ScreenEat (Active)", "sh -c 'cd "+path+" && ./ScreenEat.py --active'", "<Control><Super>O")
+if __name__ == "__main__":
+    print("ScreenEat Keybindinds Setup")
+    print("===========================")
+    path = os.path.dirname(os.path.realpath(__file__))
+    print("Setting keybinding Ctrl+Super+P for snapshot of full screen...")
+    NewKeybinding("ScreenEat", "sh -c 'cd "+path+" && ./ScreenEat.py'", "<Control><Super>P")
+    print("Done")
+    print("Setting keybinding Ctrl+Super+O for snapshot of active window...")
+    NewKeybinding("ScreenEat (Active)", "sh -c 'cd "+path+" && ./ScreenEat.py --active'", "<Control><Super>O")
+    print("Done")
