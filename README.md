@@ -80,6 +80,6 @@ The settings are stored in `config.json` file and can be changed manually or thr
 
 Find more about this project at:
 
-- [http://code-momo.herokuapp.com/blog/post/screeneat-delicious-screenshots/](http://codingparadox.herokuapp.com/blog/detail/screeneat-delicious-screenshots)
+- [http://code-momo.herokuapp.com/blog/post/screeneat-delicious-screenshots](http://code-momo.herokuapp.com/blog/post/screeneat-delicious-screenshots/)
 - [http://codingparadox.herokuapp.com/blog/detail/screeneat-delicious-screenshots](http://codingparadox.herokuapp.com/blog/detail/screeneat-delicious-screenshots)
 
