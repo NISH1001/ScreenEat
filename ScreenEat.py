@@ -6,6 +6,7 @@ import ConfigWindow
 from Screenshot import Screenshot
 from threading import Thread
 from ImgurUploader import ImgurUploader
+from CroppedScreen import CroppedScreen
 
 """
 Main GUI for our screenshot
@@ -45,6 +46,14 @@ class ScreenEat(Gtk.Window):
             pixel_buffer = shot.TakeShot(0,0, shot.active_width, shot.active_height, shot.active_window)
             imgwidth = shot.active_width
             imgheight = shot.active_height
+
+        elif "--cropped" in arguments:
+            win = CroppedScreen()
+            win.show_all()
+            pixel_buffer = shot.TakeShot(win.rect_x, win.rect_y, win.rect_width, win.rect_height, shot.root_window)
+            imgwidth = win.rect_width
+            imgheight = win.rect_height
+
         else:
             pixel_buffer = shot.TakeShot(0,0, shot.full_width, shot.full_height, shot.root_window)
             imgwidth = shot.full_width
