@@ -12,18 +12,22 @@ class CroppedScreen(Gtk.Window):
     
     def __init__(self):
         self.draw = False
+
         self.rect_x = self.rect_width = self.rect_y \
             = self.rect_height = 0
+
         Gtk.Window.__init__(self, title="")
         self.fullscreen()
         self.set_opacity(0.05)
+
         self.drawing_area = Gtk.DrawingArea()
+
         self.drawing_area.connect('draw', self.on_draw)
+
         self.drawing_area.set_events(Gdk.EventMask.EXPOSURE_MASK | \
             Gdk.EventMask.BUTTON_PRESS_MASK | Gdk.EventMask.BUTTON_RELEASE_MASK \
-            | Gdk.EventMask.POINTER_MOTION_MASK \
+            | Gdk.EventMask.POINTER_MOTION_MASK)
 
-        self.set_events(Gdk.EventMask.ALL_EVENTS_MASK)
 
         self.drawing_area.connect("button-press-event", self.on_button_press)
         self.drawing_area.connect("motion_notify_event", self.on_mouse_move)
@@ -34,7 +38,7 @@ class CroppedScreen(Gtk.Window):
         self.show_all()
 
 
-    def on_draw(self, wid, cr):
+    def on_draw(self, wid, cr):#draws the rectangle
         cr.set_source_rgba(0,0,0,0.5)
         cr.rectangle(self.rect_x, self.rect_y, self.rect_width, self.rect_height)
         cr.fill()
@@ -56,6 +60,9 @@ class CroppedScreen(Gtk.Window):
             self.get_rect(x, y)
             self.drawing_area.queue_draw()
         self.draw = False
+        self.drawing_area.destroy()
+        print(self.rect_x, self.rect_y,  self.rect_width, self.rect_height)
+        self.close()
 
     def on_mouse_move(self, w, e):
         x = e.x
@@ -82,7 +89,7 @@ class CroppedScreen(Gtk.Window):
             pass
 
 
-win = MyWindow()
+win = CroppedScreen()
 win.connect("delete-event", Gtk.main_quit)
 win.show_all()
 Gtk.main()
