@@ -51,3 +51,4 @@ if __name__ == "__main__":
     print("Done")
     print("Setting keybinding Ctrl+Super+I for cropped snapshot of full window...")
     NewKeybinding("ScreenEat (Cropped)", "sh -c 'cd "+path+" && ./ScreenEat.py --cropped'", "<Control><Super>I")
+    print("Done")

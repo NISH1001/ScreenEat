@@ -60,6 +60,8 @@ class CroppedScreen(Gtk.Window):
             and e.button == MouseButtons.LEFT_BUTTON:
             self.rect_x= e.x
             self.rect_y = e.y
+            self.init_x = e.x
+            self.init_y = e.y
             return
 
     def OnButtonRelease(self, w, e):
@@ -83,8 +85,8 @@ class CroppedScreen(Gtk.Window):
 
     # here width of rectangle and proper starting point is found
     def GetRect(self, x, y):
-        x1 = self.rect_x
-        y1 = self.rect_y
+        x1 = self.init_x
+        y1 = self.init_y
         self.rect_width = abs(x-x1)
         self.rect_height = abs(y-y1)
         if x<x1 and y<y1:#means rectangle is drawn from down right to up left
