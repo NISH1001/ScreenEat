@@ -52,6 +52,7 @@ Once done, following keybindings are set:
 
 - **`Ctrl+Super+P`** : Take screenshot of the whole desktop
 - **`Ctrl+Super+O`** : Take screenshot of only the active window
+- **`Ctrl+Super+I`** : Take cropped screenshot of the whole window
 
 > There is no need to run this script again. The keybindings are set and can be changed from `System Settings > Keyboard > Shortcuts > Custom Shortcuts` in Ubuntu.
 
@@ -69,6 +70,12 @@ Active window snapshot:
 
 ```bash
 ./ScreenEat.py --active
+```
+
+Cropped window snapshot:
+
+```bash
+./ScreenEat.py --cropped
 ```
 
 ### Configurations
