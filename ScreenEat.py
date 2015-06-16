@@ -49,7 +49,9 @@ class ScreenEat(Gtk.Window):
 
         elif "--cropped" in arguments:
             win = CroppedScreen()
+            win.connect("delete-event", Gtk.main_quit)
             win.show_all()
+            Gtk.main()
             pixel_buffer = shot.TakeShot(win.rect_x, win.rect_y, win.rect_width, win.rect_height, shot.root_window)
             imgwidth = win.rect_width
             imgheight = win.rect_height

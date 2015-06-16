@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/env python3
 
 from gi.repository import Gtk
 from gi.repository import Gdk
@@ -18,7 +18,7 @@ class CroppedScreen(Gtk.Window):
 
         Gtk.Window.__init__(self, title="")
         self.fullscreen()
-        self.set_opacity(0.05)
+        self.set_opacity(0.15)
 
         self.drawing_area = Gtk.DrawingArea()
 
@@ -35,7 +35,8 @@ class CroppedScreen(Gtk.Window):
 
         self.add(self.drawing_area)
 
-        self.show_all()
+        # connect the main window to keypress
+        self.connect("key-press-event", self.KeyPress)
 
 
     def on_draw(self, wid, cr):#draws the rectangle
@@ -87,6 +88,10 @@ class CroppedScreen(Gtk.Window):
             self.rect_y = y
         else:
             pass
+    def KeyPress(self, widget, event):
+        # if Escape -> 65307 is the code
+        if event.keyval==65307:
+            self.destroy()
 
 def main():
     win = CroppedScreen()
