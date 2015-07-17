@@ -27,7 +27,7 @@ class CroppedScreen(Gtk.Window):
 
         Gtk.Window.__init__(self, title="")
         self.fullscreen()
-        self.set_opacity(0.15)
+        self.set_opacity(0.25)
 
         self.drawing_area = Gtk.DrawingArea()
 

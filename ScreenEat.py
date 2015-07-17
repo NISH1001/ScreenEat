@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import platform, sys, os
+import time
 from gi.repository import Gtk, Gdk, GdkPixbuf, GObject
 import ConfigWindow
 from Screenshot import Screenshot
@@ -54,6 +55,7 @@ class ScreenEat(Gtk.Window):
             win.set_keep_above(True)
             win.show_all()
             Gtk.main()
+            time.sleep(0.1)
             pixel_buffer = shot.TakeShot(win.rect_x, win.rect_y, win.rect_width, win.rect_height, shot.root_window)
             imgwidth = win.rect_width
             imgheight = win.rect_height
