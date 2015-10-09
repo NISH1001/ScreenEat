@@ -7,6 +7,7 @@ from Screenshot import Screenshot
 from threading import Thread
 from ImgurUploader import ImgurUploader
 from CroppedScreen import CroppedScreen
+import time
 
 """
 Main GUI for our screenshot
@@ -54,6 +55,7 @@ class ScreenEat(Gtk.Window):
             win.set_keep_above(True)
             win.show_all()
             Gtk.main()
+            time.sleep(0.1)
             pixel_buffer = shot.TakeShot(win.rect_x, win.rect_y, win.rect_width, win.rect_height, shot.root_window)
             imgwidth = win.rect_width
             imgheight = win.rect_height
