@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import platform, sys, os
+import time
 from gi.repository import Gtk, Gdk, GdkPixbuf, GObject
 import ConfigWindow
 from Screenshot import Screenshot

@@ -27,7 +27,7 @@ class CroppedScreen(Gtk.Window):
 
         Gtk.Window.__init__(self, title="")
         self.fullscreen()
-        self.set_opacity(0.15)
+        self.set_opacity(0.25)
 
         self.drawing_area = Gtk.DrawingArea()
 
@@ -47,6 +47,11 @@ class CroppedScreen(Gtk.Window):
         # connect the main window to keypress
         self.connect("key-press-event", self.KeyPress)
 
+        # set mouse cursor type to CROSS/PLUS
+        self.SetCursor(Gdk.Cursor(Gdk.CursorType.CROSS))
+
+    def SetCursor(self, cursor):
+        self.get_root_window().set_cursor(cursor)
 
     def OnDraw(self, wid, cr):#draws the rectangle
         cr.set_source_rgba(0,0,0,0.5)
@@ -76,6 +81,9 @@ class CroppedScreen(Gtk.Window):
         print(self.rect_x, self.rect_y,  self.rect_width, self.rect_height)
         self.close()
 
+        # restore the cursor type
+        self.SetCursor(Gdk.Cursor(Gdk.CursorType.LEFT_PTR))
+
     def OnMouseMove(self, w, e):
         x = e.x
         y = e.y
@@ -102,6 +110,7 @@ class CroppedScreen(Gtk.Window):
     def KeyPress(self, widget, event):
         # if Escape -> 65307 is the code
         if event.keyval==65307:
+            self.SetCursor(Gdk.Cursor(Gdk.CursorType.LEFT_PTR))
             self.destroy()
 
 def main():

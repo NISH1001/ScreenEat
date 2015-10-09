@@ -4,7 +4,7 @@ Screenshots made delicious and easy.
 
 ## What is it?
 
-It is a simple tool to make sharing your desktop screenshots super easy.
+It is a simple open- source tool to make sharing your desktop screenshots super easy.
 It offers you to share the screenshot by immediately uploading the snap to web and gives you a sharable *url*.
 
 > Currently, ScreenEat uses [**Imgur**](http://imgur.com/) to store the uploaded images, as it seems the most convenient option for now. This can change in future if needed.
@@ -95,3 +95,4 @@ Find more about this project at:
 - [http://code-momo.herokuapp.com/blog/post/screeneat-delicious-screenshots](http://code-momo.herokuapp.com/blog/post/screeneat-delicious-screenshots/)
 - [http://codingparadox.herokuapp.com/blog/detail/screeneat-delicious-screenshots](http://codingparadox.herokuapp.com/blog/detail/screeneat-delicious-screenshots)
 
+> BTW, ScreenEat is open-source and you can contribute too if you like.
