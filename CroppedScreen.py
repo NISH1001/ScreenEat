@@ -54,7 +54,7 @@ class CroppedScreen(Gtk.Window):
         self.get_root_window().set_cursor(cursor)
 
     def OnDraw(self, wid, cr):#draws the rectangle
-        cr.set_source_rgba(0,0,0,self.get_opacity()*2)
+        cr.set_source_rgba(0,0,0,0.5)
         cr.rectangle(self.rect_x, self.rect_y, self.rect_width, self.rect_height)
         cr.fill()
 
@@ -70,20 +70,19 @@ class CroppedScreen(Gtk.Window):
             return
 
     def OnButtonRelease(self, w, e):
-        if e.type==Gdk.EventType.BUTTON_RELEASE \
-            and e.button == MouseButtons.LEFT_BUTTON:
+        if e.type==Gdk.EventType.BUTTON_RELEASE and e.button == MouseButtons.LEFT_BUTTON:
             y=e.y
             x=e.x
             self.GetRect(x, y)
-            self.set_opacity(0)
-            self.drawing_area.queue_draw()
-        self.draw = False
-        self.drawing_area.destroy()
-        print(self.rect_x, self.rect_y,  self.rect_width, self.rect_height)
-        self.close()
+            self.draw = False
+            self.drawing_area.destroy()
+            self.close()
 
-        # restore the cursor type
-        self.SetCursor(Gdk.Cursor(Gdk.CursorType.LEFT_PTR))
+            # restore the cursor type
+            self.SetCursor(Gdk.Cursor(Gdk.CursorType.LEFT_PTR))
+
+    def OnDestroy(self, w, e):
+        self.close()
 
     def OnMouseMove(self, w, e):
         x = e.x
