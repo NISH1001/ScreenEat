@@ -54,7 +54,7 @@ class CroppedScreen(Gtk.Window):
         self.get_root_window().set_cursor(cursor)
 
     def OnDraw(self, wid, cr):#draws the rectangle
-        cr.set_source_rgba(0,0,0,0.5)
+        cr.set_source_rgba(0,0,0,self.get_opacity()*2)
         cr.rectangle(self.rect_x, self.rect_y, self.rect_width, self.rect_height)
         cr.fill()
 
@@ -75,6 +75,7 @@ class CroppedScreen(Gtk.Window):
             y=e.y
             x=e.x
             self.GetRect(x, y)
+            self.set_opacity(0)
             self.drawing_area.queue_draw()
         self.draw = False
         self.drawing_area.destroy()
@@ -111,7 +112,7 @@ class CroppedScreen(Gtk.Window):
         # if Escape -> 65307 is the code
         if event.keyval==65307:
             self.SetCursor(Gdk.Cursor(Gdk.CursorType.LEFT_PTR))
-            self.destroy()
+            self.close()
 
 def main():
     win = CroppedScreen()

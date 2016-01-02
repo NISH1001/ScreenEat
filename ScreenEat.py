@@ -56,7 +56,8 @@ class ScreenEat(Gtk.Window):
             win.set_keep_above(True)
             win.show_all()
             Gtk.main()
-            time.sleep(0.1)
+
+            # time.sleep(0.1)
             pixel_buffer = shot.TakeShot(win.rect_x, win.rect_y, win.rect_width, win.rect_height, shot.root_window)
             imgwidth = win.rect_width
             imgheight = win.rect_height
@@ -209,10 +210,13 @@ class ScreenEat(Gtk.Window):
         dialog.add_filter(filter_jpg)
         dialog.set_default_size(50,50)
         dialog.set_do_overwrite_confirmation(True)
+        dialog.set_current_name("untitled.jpg")
 
         response = dialog.run()
         if response == Gtk.ResponseType.OK:
             filename = dialog.get_filename()
+            if "." not in filename:
+                filename += ".jpg"
             print(dialog.get_filename())
             shot = Screenshot()
             shot.SaveShot(pixbuf, filename)
