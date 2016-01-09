@@ -7,8 +7,9 @@ import sys, os
 def LoadConfig():
     #load defaults from configuration file
     config = {}
+    path = os.path.dirname(os.path.abspath(__file__))
     try:
-        configstr = open("config.json").read()
+        configstr = open(path + "/config.json").read()
         config = json.loads(configstr)
         # if 'automatic' key doesnt exit
         if not "automatic" in config:
@@ -72,7 +73,7 @@ class ConfigWindow(Gtk.Window):
     def KeyPress(self, widget, event):
         # if Escape -> 65307 is the code
         if event.keyval==65307:
-            self.destroy()
+            self.close()
 
     def Apply(self, w):
         config = {}
@@ -82,6 +83,9 @@ class ConfigWindow(Gtk.Window):
         self.close()
 
     def Close(self, w):
+        self.close()
+
+    def OnDestroy(self, w, e):
         self.close()
 
 def main():
