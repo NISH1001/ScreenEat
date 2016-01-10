@@ -19,7 +19,7 @@ Section 2 : Utilites like 'save image', 'copy to clipboard' , 'settings UI'
 Section 3 : Upload Section like 'upload the image', 'get the sharable link'
 
 If 'automatic' upload is enabled :
-    screenshot is automatically uploaded and 
+    screenshot is automatically uploaded and
     a sharable link is provided if successful
 """
 class ScreenEat(Gtk.Window):
@@ -29,128 +29,126 @@ class ScreenEat(Gtk.Window):
         self.set_position(Gtk.WindowPosition.CENTER_ALWAYS)
         self.set_resizable(False)
 
-        grid = Gtk.Grid(row_homogeneous=True, column_homogeneous=False)
-        grid.props.margin_top = 20
-        grid.props.margin_right = 20
-        grid.props.margin_left = 10
-        grid.props.margin_bottom = 10
+        grid = Gtk.Grid(row_homogeneous=False, column_homogeneous=False)
+        grid.props.margin_top = 5
+        grid.props.margin_right = 5
+        grid.props.margin_left = 5
+        grid.props.margin_bottom = 5
         self.add(grid)
+        self.grid = grid
 
         # take the shot immediately after invoke
-        shot = Screenshot()
-
-        ''' span : from col=0, row=0, to col=1, row=4 '''
-        imageprev= Gtk.Label("imagepreview")
-
         # take shot, considering --active argument
+        shot = Screenshot()
         arguments = sys.argv[1::]
         if "--active" in arguments:
-            pixel_buffer = shot.TakeShot(0,0, shot.active_width, shot.active_height, shot.active_window)
+            pixel_buffer = shot.TakeShot(0,0, shot.active_width,
+                    shot.active_height, shot.active_window)
             imgwidth = shot.active_width
             imgheight = shot.active_height
-
         elif "--cropped" in arguments:
             win = CroppedScreen()
             win.connect("delete-event", Gtk.main_quit)
             win.set_modal(True)
             win.set_keep_above(True)
-            win.show_all()
             Gtk.main()
-
             time.sleep(0.2)
-            pixel_buffer = shot.TakeShot(win.rect_x, win.rect_y, win.rect_width, win.rect_height, shot.root_window)
+            pixel_buffer = shot.TakeShot(win.rect_x, win.rect_y,
+                    win.rect_width, win.rect_height, shot.root_window)
             imgwidth = win.rect_width
             imgheight = win.rect_height
-
         else:
-            pixel_buffer = shot.TakeShot(0,0, shot.full_width, shot.full_height, shot.root_window)
+            pixel_buffer = shot.TakeShot(0,0, shot.full_width,
+                    shot.full_height, shot.root_window)
             imgwidth = shot.full_width
             imgheight = shot.full_height
-        
-        if imgheight > imgwidth:
-            scaled = pixel_buffer.scale_simple(200*imgwidth/imgheight,200, GdkPixbuf.InterpType.BILINEAR)
-        else:
-            scaled = pixel_buffer.scale_simple(300,300*imgheight/imgwidth, GdkPixbuf.InterpType.BILINEAR)
-
-        self.pixel_buffer = pixel_buffer
-        image = Gtk.Image().new_from_pixbuf(scaled)
-        grid.attach(image, 0, 0, 1, 4)
 
         # save shot for future
         shot.SaveShot(pixel_buffer, "")
         self.filename = shot.filename
+        self.url = ""
 
-        box_buttons = Gtk.Box(spacing=10)
-        box_buttons.props.margin_top = 10
-        box_buttons.props.margin_left = 10
+        # Create image preview
+        ratio = imgheight/imgwidth
 
-        #button_save = Gtk.Button(label="Save To File")
+        if ratio > 1:
+            scaled = pixel_buffer.scale_simple(500/ratio,500,
+                    GdkPixbuf.InterpType.BILINEAR)
+        else:
+            scaled = pixel_buffer.scale_simple(500,500*ratio,
+                    GdkPixbuf.InterpType.BILINEAR)
+
+
+        self.pixel_buffer = pixel_buffer
+        image = Gtk.Image().new_from_pixbuf(scaled)
+        self.image = image
+
+        # create upload section:
+        upload_section = Gtk.Box(spacing = 5)
+        upload_section.props.margin_top = 5
+        self.upload_section = upload_section
+
+        # create buttons for upload section:
+        button_upload = Gtk.Button(label="Upload")
+        button_upload.connect("clicked", self.Upload)
+        self.button_upload = button_upload
+        upload_section.add(button_upload)
+
+        # create buttons for copy section:
+        button_copyclipboard = Gtk.Button(label="Copy url")
+        button_copyclipboard.connect("clicked", self.CopyUrl)
+        self.button_copyclipboard = button_copyclipboard
+        upload_section.add(button_copyclipboard)
+
+        # Create misc section:
+        misc_section = Gtk.Box(spacing=5)
+        misc_section.props.margin_top = 5
+        misc_section.props.halign = Gtk.Align.END
+
+        # Create buttons for misc section
         button_save = Gtk.Button(image=Gtk.Image(stock=Gtk.STOCK_SAVE_AS))
         button_save.set_tooltip_text("Save image (Ctrl+S)")
-        button_save.connect("clicked", self.ImageSave, pixel_buffer) #pixel buffer is passed
-        box_buttons.add(button_save)
+        button_save.connect("clicked", self.ImageSave, pixel_buffer)
+        misc_section.add(button_save)
 
-        #button_copy = Gtk.Button(label="Copy Image To Clipboard")
         button_copy = Gtk.Button(image=Gtk.Image(stock=Gtk.STOCK_COPY))
         button_copy.set_tooltip_text("Copy image to Clipboard")
         button_copy.connect("clicked", self.ImageCopy, pixel_buffer)
-        box_buttons.add(button_copy)
+        misc_section.add(button_copy)
 
         button_settings = Gtk.Button(image=Gtk.Image(stock=Gtk.STOCK_PREFERENCES))
         button_settings.set_tooltip_text("Settings")
         button_settings.connect("clicked", self.Configuration)
-        box_buttons.add(button_settings)
+        misc_section.add(button_settings)
 
-        box_buttons.props.halign = Gtk.Align.CENTER
-        grid.attach(box_buttons, 2, 3, 3, 1)
+        # Create notification label
+        label_status = Gtk.Label("ScreenEat")
+        label_status.set_margin_top(5)
+        label_status.set_alignment(xalign=0.5, yalign=0.5)
+        label_status.props.width_chars = 24
+        self.label_status = label_status
 
-        # create all 3 upload sections:
-        uploadSection1 = Gtk.Box(spacing = 10)
-        button_upload = Gtk.Button(label="Upload")
-        button_upload.connect("clicked", self.Upload)
-        uploadSection1.pack_start(button_upload, expand=True, fill=True, padding=5)
-        uploadSection1.props.margin_left = 10
-        uploadSection1.props.margin_top = 10
+        # attach to grid
+        grid.attach(image, 0, 0, 3, 1)
+        grid.attach_next_to(upload_section, image,
+                Gtk.PositionType.BOTTOM, 1, 1)
+        grid.attach_next_to(label_status, upload_section,
+                Gtk.PositionType.RIGHT, 1, 1)
+        grid.attach_next_to(misc_section, label_status,
+                Gtk.PositionType.RIGHT, 1, 1)
 
-        uploadSection2 = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing = 10)
-        spinner = Gtk.Spinner()
-        spinner.start()
-        uploadSection2.add(spinner)
-        label_uploading = Gtk.Label("Uploading...")
-        uploadSection2.add(label_uploading)
-        uploadSection2.props.margin_left = 10
-        uploadSection2.props.margin_top = 10
+        # connect the main window to keypress
+        self.connect("key-press-event", self.KeyPress)
+        self.connect("delete-event", Gtk.main_quit)
 
-        uploadSection3 = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing = 10)
-        label_url = Gtk.Label("URL:...")
-        uploadSection3.add(label_url)
-        button_copy = Gtk.Button(label="Copy Url")
-        button_copy.connect("clicked", self.CopyUrl)
-        uploadSection3.add(button_copy)
-        uploadSection3.props.margin_left = 10
-        uploadSection3.props.margin_top = 10
-
-        self.label_notfication = Gtk.Label("Click below to upload the screenshot")
-        self.label_notfication.props.margin_left = 10
-        self.label_notfication.props.width_chars = 32
-        grid.attach(self.label_notfication, 2, 0, 2, 1)
-        
-        # attach the first upload section
-        grid.attach(uploadSection1, 2, 1, 2, 2)
-
-        self.grid = grid
-        self.uploadSection1 = uploadSection1
-        self.uploadSection2 = uploadSection2
-        self.uploadSection3 = uploadSection3
-        self.label_url = label_url
+        self.show_all()
 
         config = ConfigWindow.LoadConfig()
         # if automatic upload then start uploading now
         if (config["automatic"]):
             self.Upload(None)
+        self.button_copyclipboard.hide()
 
-        # connect the main window to keypress
-        self.connect("key-press-event", self.KeyPress)
 
     def Configuration(self, widget):
         win = ConfigWindow.ConfigWindow()
@@ -166,43 +164,41 @@ class ScreenEat(Gtk.Window):
             Gtk.main_quit()
         if ctrl and keyname=="s":
             self.ImageSave(widget, self.pixel_buffer)
-    
+
     def CopyUrl(self, widget):
-        if (self.url):
-            clipboard = Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)
-            clipboard.set_text(self.url, -1)
-            clipboard.store()
+        clipboard = Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)
+        clipboard.set_text(self.url, -1)
+        clipboard.store()
 
-    def Upload(self, widget): 
-        self.grid.remove(self.uploadSection1)
-        self.grid.attach(self.uploadSection2, 2, 1, 2, 2)
-        self.label_notfication.set_text("")
-        self.grid.show_all()
-
+    def Upload(self, widget):
+        self.label_status.set_text("Upload in Progress")
+        self.button_upload.set_sensitive(False)
         thread = Thread(target=self.StartUploading)
         thread.start()
 
     def StartUploading(self):
         uploader = ImgurUploader()
         result = uploader.Upload(self.filename)
-        print(result)
-        if (result['success']):
-            self.label_url.set_markup("URL: <a href='" + result['link']+"'>" + result['link'] + "</a>")
-            self.grid.remove(self.uploadSection2)
-            self.grid.attach(self.uploadSection3, 2, 1, 2, 2)
-            self.grid.show_all()
+        # print(result)
+        if result['success']:
             self.url = result['link']
-            self.label_notfication.set_text("Upload Successful !!")
+            self.label_status.set_markup("<a href='" + result['link']+"'>" + result['link'] + "</a>")
+            self.button_upload.hide()
+            self.button_upload.set_sensitive(True)
+            self.button_copyclipboard.show()
         else:
-            self.label_notfication.set_text("Upload Failed !! Try again !")
-            self.grid.remove(self.uploadSection2)
-            self.grid.attach(self.uploadSection1, 2, 1, 2, 2)
-            self.grid.show_all()
+            self.label_status.set_text("Upload Failed!")
+            self.button_upload.show()
 
-    # for image saving
+    def ImageCopy(self, widget, pixbuf):
+        clipboard = Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)
+        clipboard.set_image(pixbuf)
+        clipboard.store()
+
     def ImageSave(self, widget, pixbuf):
-        dialog = Gtk.FileChooserDialog("Please choose a folder", self, Gtk.FileChooserAction.SAVE,
-                    (Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL, "Save", Gtk.ResponseType.OK))
+        dialog = Gtk.FileChooserDialog("Please choose a folder", self,
+                    Gtk.FileChooserAction.SAVE, (Gtk.STOCK_CANCEL,
+                    Gtk.ResponseType.CANCEL, "Save", Gtk.ResponseType.OK))
 
         filter_jpg = Gtk.FileFilter()
         filter_jpg.set_name("JPEG images")
@@ -210,7 +206,8 @@ class ScreenEat(Gtk.Window):
         dialog.add_filter(filter_jpg)
         dialog.set_default_size(50,50)
         dialog.set_do_overwrite_confirmation(True)
-        dialog.set_current_name("untitled.jpg")
+        filename = time.strftime("%Y-%m-%d %H:%M:%S.jpg")
+        dialog.set_current_name(filename)
 
         response = dialog.run()
         if response == Gtk.ResponseType.OK:
@@ -222,19 +219,12 @@ class ScreenEat(Gtk.Window):
             shot.SaveShot(pixbuf, filename)
         dialog.destroy()
 
-    def ImageCopy(self, widget, pixbuf):
-        clipboard = Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)
-        clipboard.set_image(pixbuf)
-        clipboard.store()
-
 def main():
     GObject.threads_init()
     if platform.system() == 'Linux':
         Gdk.threads_init()
 
     win = ScreenEat()
-    win.connect("delete-event", Gtk.main_quit)
-    win.show_all()
     Gtk.main()
 
     try:
