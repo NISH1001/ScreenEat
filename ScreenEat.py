@@ -51,6 +51,7 @@ class ScreenEat(Gtk.Window):
             win.connect("delete-event", Gtk.main_quit)
             win.set_modal(True)
             win.set_keep_above(True)
+            win.show_all()
             Gtk.main()
             time.sleep(0.2)
             pixel_buffer = shot.TakeShot(win.rect_x, win.rect_y,
