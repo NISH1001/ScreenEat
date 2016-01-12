@@ -4,114 +4,113 @@ from gi.repository import Gtk
 from gi.repository import Gdk
 import cairo
 
+
 class MouseButtons:
-    LEFT_BUTTON =1
+    LEFT_BUTTON = 1
     RIGHT_BUTTON = 3
 
-"""
-Cropped Window UI
-Contains : 
 
-rect_x, rect_y          - x,y top-left position of cropped region
-rect_width, rect_height - width,height of the rectangular cropped region 
-
-
-"""
 class CroppedScreen(Gtk.Window):
-    
+
     def __init__(self):
-        self.draw = False
-
-        self.rect_x = self.rect_width = self.rect_y \
-            = self.rect_height = 0
-
         Gtk.Window.__init__(self, title="")
+
+        # Create a fullscreen window and set RGBA visual if supported
         self.fullscreen()
-        self.set_opacity(0.25)
 
-        self.drawing_area = Gtk.DrawingArea()
+        screen = self.get_screen()
+        visual = screen.get_rgba_visual()
+        if visual and screen.is_composited():
+            self.set_visual(visual)
 
-        self.drawing_area.connect('draw', self.OnDraw)
+        self.set_app_paintable(True)
 
-        self.drawing_area.set_events(Gdk.EventMask.EXPOSURE_MASK | \
-            Gdk.EventMask.BUTTON_PRESS_MASK | Gdk.EventMask.BUTTON_RELEASE_MASK \
-            | Gdk.EventMask.POINTER_MOTION_MASK)
+        # Set some variables
+        self.draw = False
+        self.rect_x = self.rect_width = 0
+        self.rect_y = self.rect_height = 0
 
+        # Connect events
+        self.connect('draw', self.on_draw)
 
-        self.drawing_area.connect("button-press-event", self.OnButtonPress)
-        self.drawing_area.connect("motion_notify_event", self.OnMouseMove)
-        self.drawing_area.connect("button-release-event", self.OnButtonRelease)
+        self.set_events(Gdk.EventMask.EXPOSURE_MASK |
+                        Gdk.EventMask.BUTTON_PRESS_MASK |
+                        Gdk.EventMask.BUTTON_RELEASE_MASK |
+                        Gdk.EventMask.POINTER_MOTION_MASK)
 
-        self.add(self.drawing_area)
+        self.connect("button-press-event", self.mouse_down)
+        self.connect("motion_notify_event", self.mouse_move)
+        self.connect("button-release-event", self.mouse_release)
+        self.connect("key-press-event", self.key_press)
 
-        # connect the main window to keypress
-        self.connect("key-press-event", self.KeyPress)
+        # Set mouse cursor type to CROSS/PLUS
+        self.set_cursor(Gdk.Cursor(Gdk.CursorType.CROSS))
 
-        # set mouse cursor type to CROSS/PLUS
-        self.SetCursor(Gdk.Cursor(Gdk.CursorType.CROSS))
-
-    def SetCursor(self, cursor):
+    def set_cursor(self, cursor):
         self.get_root_window().set_cursor(cursor)
 
-    def OnDraw(self, wid, cr):#draws the rectangle
-        cr.set_source_rgba(0,0,0,0.5)
-        cr.rectangle(self.rect_x, self.rect_y, self.rect_width, self.rect_height)
-        cr.fill()
+    def on_draw(self, wid, cr):
+        # Draw transparent background
+        cr.set_source_rgba(0.2, 0.2, 0.2, 0.1)
+        cr.set_operator(cairo.OPERATOR_SOURCE)
+        cr.paint()
 
+        # Draw rectangle for current selection
+        if self.draw:
+            cr.set_source_rgba(1, 1, 1, 0.3)
+            cr.rectangle(self.rect_x, self.rect_y,
+                         self.rect_width, self.rect_height)
+            cr.fill()
 
-    def OnButtonPress(self, w, e):
-        self.draw=True
-        if e.type==Gdk.EventType.BUTTON_PRESS \
-            and e.button == MouseButtons.LEFT_BUTTON:
-            self.rect_x= e.x
+    def mouse_down(self, w, e):
+        if e.button == MouseButtons.LEFT_BUTTON:
+            self.rect_x = e.x
             self.rect_y = e.y
             self.init_x = e.x
             self.init_y = e.y
-            return
+            self.draw = True
 
-    def OnButtonRelease(self, w, e):
-        if e.type==Gdk.EventType.BUTTON_RELEASE and e.button == MouseButtons.LEFT_BUTTON:
-            y=e.y
-            x=e.x
-            self.GetRect(x, y)
+    def mouse_release(self, w, e):
+        if e.button == MouseButtons.LEFT_BUTTON:
+            y = e.y
+            x = e.x
+            self.get_rect(x, y)
             self.draw = False
-            self.drawing_area.destroy()
             self.close()
 
             # restore the cursor type
-            self.SetCursor(Gdk.Cursor(Gdk.CursorType.LEFT_PTR))
+            self.set_cursor(Gdk.Cursor(Gdk.CursorType.LEFT_PTR))
 
-    def OnDestroy(self, w, e):
-        self.close()
-
-    def OnMouseMove(self, w, e):
+    def mouse_move(self, w, e):
         x = e.x
         y = e.y
         if self.draw:
-            self.GetRect(x, y)
-            self.drawing_area.queue_draw()
+            self.get_rect(x, y)
+            self.queue_draw()
 
-    # here width of rectangle and proper starting point is found
-    def GetRect(self, x, y):
+    # Calculate rectangle to draw selection
+    def get_rect(self, x, y):
         x1 = self.init_x
         y1 = self.init_y
         self.rect_width = abs(x-x1)
         self.rect_height = abs(y-y1)
-        if x<x1 and y<y1:#means rectangle is drawn from down right to up left
-            # change start point
+
+        if x < x1 and y < y1:
             self.rect_x = x
             self.rect_y = y
-        elif x<x1 and y>y1:
+        elif x < x1 and y > y1:
             self.rect_x = x
-        elif x>x1 and y<y1:
+        elif x > x1 and y < y1:
             self.rect_y = y
         else:
             pass
-    def KeyPress(self, widget, event):
+
+    def key_press(self, widget, event):
         # if Escape -> 65307 is the code
-        if event.keyval==65307:
-            self.SetCursor(Gdk.Cursor(Gdk.CursorType.LEFT_PTR))
+        if event.keyval == 65307:
+            self.set_cursor(Gdk.Cursor(Gdk.CursorType.LEFT_PTR))
             self.close()
+
 
 def main():
     win = CroppedScreen()
@@ -119,5 +118,6 @@ def main():
     win.show_all()
     Gtk.main()
 
-if __name__=="__main__":
+
+if __name__ == "__main__":
     main()

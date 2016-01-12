@@ -10,6 +10,7 @@ from ImgurUploader import ImgurUploader
 from CroppedScreen import CroppedScreen
 import time
 
+
 """
 Main GUI for our screenshot
 Contains Three section
@@ -22,6 +23,8 @@ If 'automatic' upload is enabled :
     screenshot is automatically uploaded and
     a sharable link is provided if successful
 """
+
+
 class ScreenEat(Gtk.Window):
 
     def __init__(self):
@@ -41,11 +44,13 @@ class ScreenEat(Gtk.Window):
         # take shot, considering --active argument
         shot = Screenshot()
         arguments = sys.argv[1::]
+
         if "--active" in arguments:
             pixel_buffer = shot.TakeShot(0,0, shot.active_width,
                     shot.active_height, shot.active_window)
             imgwidth = shot.active_width
             imgheight = shot.active_height
+
         elif "--cropped" in arguments:
             win = CroppedScreen()
             win.connect("delete-event", Gtk.main_quit)
@@ -58,6 +63,7 @@ class ScreenEat(Gtk.Window):
                     win.rect_width, win.rect_height, shot.root_window)
             imgwidth = win.rect_width
             imgheight = win.rect_height
+
         else:
             pixel_buffer = shot.TakeShot(0,0, shot.full_width,
                     shot.full_height, shot.root_window)
