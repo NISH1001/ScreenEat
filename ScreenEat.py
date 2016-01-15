@@ -178,15 +178,19 @@ class ScreenEat(Gtk.Window):
         clipboard.store()
 
     def Upload(self, widget):
-        self.label_status.set_text("Upload in Progress")
-        self.button_upload.set_sensitive(False)
         thread = Thread(target=self.StartUploading)
         thread.start()
 
     def StartUploading(self):
+        Gdk.threads_enter()
+        self.label_status.set_text("Upload in Progress")
+        self.button_upload.set_sensitive(False)
+        Gdk.threads_leave()
+
         uploader = ImgurUploader()
         result = uploader.Upload(self.filename)
         # print(result)
+        Gdk.threads_enter()
         if result['success']:
             self.url = result['link']
             self.label_status.set_markup("<a href='" + result['link']+"'>" + result['link'] + "</a>")
@@ -195,7 +199,8 @@ class ScreenEat(Gtk.Window):
             self.button_copyclipboard.show()
         else:
             self.label_status.set_text("Upload Failed!")
-            self.button_upload.show()
+            self.button_upload.set_sensitive(True)
+        Gdk.threads_leave()
 
     def ImageCopy(self, widget, pixbuf):
         clipboard = Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)
@@ -232,8 +237,9 @@ def main():
         Gdk.threads_init()
 
     win = ScreenEat()
+    Gdk.threads_enter()
     Gtk.main()
-
+    Gdk.threads_leave()
     try:
         os.remove(win.filename)
     except:
