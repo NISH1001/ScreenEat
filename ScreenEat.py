@@ -55,10 +55,9 @@ class ScreenEat(Gtk.Window):
             Gtk.main()
             Gdk.threads_leave()
 
-            time.sleep(0.2)
-            pixel_buffer = shot.take_shot(win.rect_x, win.rect_y,
-                                          win.rect_width, win.rect_height,
-                                          shot.root_window)
+            temp = win.pixel_buffer
+            pixel_buffer = temp.new_subpixbuf(win.rect_x, win.rect_y,
+                                              win.rect_width, win.rect_height)
             imgwidth = win.rect_width
             imgheight = win.rect_height
 

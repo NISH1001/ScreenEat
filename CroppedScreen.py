@@ -4,6 +4,8 @@ from gi.repository import Gtk
 from gi.repository import Gdk
 import cairo
 
+from Screenshot import Screenshot
+
 
 class MouseButtons:
     LEFT_BUTTON = 1
@@ -15,15 +17,10 @@ class CroppedScreen(Gtk.Window):
     def __init__(self):
         Gtk.Window.__init__(self, title="")
 
-        # Create a fullscreen window and set RGBA visual if supported
+        # Create a fullscreen window and add drawing area
         self.fullscreen()
-
-        screen = self.get_screen()
-        visual = screen.get_rgba_visual()
-        if visual and screen.is_composited():
-            self.set_visual(visual)
-
-        self.set_app_paintable(True)
+        self.drawing_area = Gtk.DrawingArea()
+        self.add(self.drawing_area)
 
         # Set some variables
         self.draw = False
@@ -31,28 +28,32 @@ class CroppedScreen(Gtk.Window):
         self.rect_y = self.rect_height = 0
 
         # Connect events
-        self.connect('draw', self.on_draw)
 
-        self.set_events(Gdk.EventMask.EXPOSURE_MASK |
-                        Gdk.EventMask.BUTTON_PRESS_MASK |
-                        Gdk.EventMask.BUTTON_RELEASE_MASK |
-                        Gdk.EventMask.POINTER_MOTION_MASK)
+        self.drawing_area.connect('draw', self.on_draw)
+        self.drawing_area.set_events(Gdk.EventMask.EXPOSURE_MASK |
+                                     Gdk.EventMask.BUTTON_PRESS_MASK |
+                                     Gdk.EventMask.BUTTON_RELEASE_MASK |
+                                     Gdk.EventMask.POINTER_MOTION_MASK)
 
-        self.connect("button-press-event", self.mouse_down)
-        self.connect("motion_notify_event", self.mouse_move)
-        self.connect("button-release-event", self.mouse_release)
-        self.connect("key-press-event", self.key_press)
+        self.drawing_area.connect("button-press-event", self.mouse_down)
+        self.drawing_area.connect("motion_notify_event", self.mouse_move)
+        self.drawing_area.connect("button-release-event", self.mouse_release)
+        self.drawing_area.connect("key-press-event", self.key_press)
 
         # Set mouse cursor type to CROSS/PLUS
         self.set_cursor(Gdk.Cursor(Gdk.CursorType.CROSS))
+
+        # Take full screenshot to show in drawing area
+        shot = Screenshot()
+        self.pixel_buffer = shot.take_shot(0, 0, shot.full_width,
+                                           shot.full_height, shot.root_window)
 
     def set_cursor(self, cursor):
         self.get_root_window().set_cursor(cursor)
 
     def on_draw(self, wid, cr):
-        # Draw transparent background
-        cr.set_source_rgba(0.2, 0.2, 0.2, 0.1)
-        cr.set_operator(cairo.OPERATOR_SOURCE)
+        # Draw the full screen shot
+        Gdk.cairo_set_source_pixbuf(cr, self.pixel_buffer, 0, 0)
         cr.paint()
 
         # Draw rectangle for current selection
@@ -61,6 +62,7 @@ class CroppedScreen(Gtk.Window):
             cr.rectangle(self.rect_x, self.rect_y,
                          self.rect_width, self.rect_height)
             cr.fill()
+        return True
 
     def mouse_down(self, w, e):
         if e.button == MouseButtons.LEFT_BUTTON:

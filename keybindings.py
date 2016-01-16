@@ -6,7 +6,7 @@ import os
 
 
 def get(cmd):
-    subprocess.check_output(["/bin/bash", "-c", cmd]).decode("utf-8")
+    return subprocess.check_output(["/bin/bash", "-c", cmd]).decode("utf-8")
 
 
 def add_keybinding(name, command, binding):
