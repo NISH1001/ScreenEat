@@ -1,21 +1,25 @@
 #!/usr/bin/env python3
-import base64, requests, datetime
+import base64
+import requests
+import datetime
+
 
 """
 An uploader class to upload image to imgur
-Upload : Method to upload a file to imgur
+upload : Method to upload a file to imgur
 """
+
+
 class ImgurUploader():
     def __init__(self):
         client_id = "e8ac1a4090ab0b3"
         self.headers = {"Authorization": "Client-ID "+client_id}
 
-
-    def Upload(self, filename):
+    def upload(self, filename):
         try:
             # upload route
             url = "https://api.imgur.com/3/image"
-            
+
             # record time for debug purposes
             prev_time = datetime.datetime.now()
 
@@ -23,7 +27,7 @@ class ImgurUploader():
             response = requests.post(
                 url,
                 headers=self.headers,
-                data = {
+                data={
                     'image': base64.b64encode(open(filename, 'rb').read()),
                     'type': 'base64',
                     'name': filename,
@@ -45,14 +49,14 @@ class ImgurUploader():
 
         except:
             return {'success': False}
-        
+
 
 def main():
     imguru = ImgurUploader()
     print("Uploading")
-    result = imguru.Upload("test.jpg")
+    result = imguru.upload("test.jpg")
     print(result)
 
 
-if __name__=="__main__":
+if __name__ == "__main__":
     main()

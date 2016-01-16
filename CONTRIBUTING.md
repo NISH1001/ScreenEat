@@ -3,48 +3,53 @@
 # Git
 -------------
 
-## 1. commit message
-Use **active** voice for commit message.  
+## 1. Commit messages
+
+Use **imperative, present tense** for commit messages.
 For example:  
-> add memory efficient data structure
+
+> Add memory efficient data structure
 
 Instead of:
-> added memory efficient data structure
 
-## 2. no redundant commits
-Please! don't push redundant commits whenever you change your code.  
+> Added memory efficient data structure
+
+
+## 2. No redundant commits
+
+Please! do not push redundant commits whenever you change your code.  
+
 For example (redundant commit):
-> edit README.md
 
-> fix typo in README.md
+> Edit README.md
+> 
+> Fix typo in README.md
+
 
 # Python
 -------------
 
-Strictly follow [pep-8](https://www.python.org/dev/peps/pep-0008/)  
+Strictly follow [pep-8](https://www.python.org/dev/peps/pep-0008/)
 Following are some of the imposed conventions that every pythonista must follow:
 
-## 1. function definitions
-- use lower case for every function names
-- in case the function has multiple words, separat by an **underscore**
+## 1. Function definitions
+- Use lower case for function names
+- In case the function has multiple words, separate them by **underscore**
 - `do_this()`
 
-## 2. packages
-- same as in function definitions
-- be sure to create a package in a folder that contains `__init__.py`
+## 2. Packages
+- Follow same convention as in function definitions
+- Be sure to create a package in a folder that contains `__init__.py`
 - `package`
 
 ## 3. Classes
-- use **UpperCaseCamelCase** convention like this one
+- Use **UpperCaseCamelCase** convention like this one
 - `Exception` classes should end in **Error**
 - `ScrapError`
-- **public** variables should be all lower case seperated by an underscore
+- **Public** variables should be in lower case seperated by underscore
 - `self.my_list`
-- **private** variables should begin with a **single** underscore
+- **Private** variables should begin with a **single** underscore
 
 ## 4. Constants
-- use **FULLY_CAPITALIZED** name for constants
-- if multiple words, separate them by an underscore
-
-
-
+- Use **FULLY_CAPITALIZED** name for constants
+- In case of multiple words, separate them by underscore

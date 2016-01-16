@@ -2,36 +2,44 @@
 from gi.repository import Gtk
 
 import json
-import sys, os
+import sys
+import os
 
-def LoadConfig():
-    #load defaults from configuration file
+
+def load_config():
+    # Load defaults from configuration file
     config = {}
     path = os.path.dirname(os.path.abspath(__file__))
     try:
         configstr = open(path + "/config.json").read()
         config = json.loads(configstr)
-        # if 'automatic' key doesnt exit
-        if not "automatic" in config:
+        # If 'automatic' key doesnt exit
+        if "automatic" not in config:
             config["automatic"] = False
     except:
         print("Couldn't load configuration file: config.json")
     return config
 
-def SaveConfig(config):
+
+def save_config(config):
     configstr = json.dumps(config, indent=4)
     open("config.json", "w").write(configstr)
- 
-def Nothing():
+
+
+def do_nothing():
     pass
 
-ChangeHandler = Nothing
+
+change_handler = do_nothing
+
 
 """
 A configuration/settings GUI
-Contains : 
+Contains:
     'automatic' upload enable/disable
 """
+
+
 class ConfigWindow(Gtk.Window):
 
     def __init__(self):
@@ -39,11 +47,11 @@ class ConfigWindow(Gtk.Window):
         self.set_position(Gtk.WindowPosition.CENTER_ALWAYS)
         self.set_resizable(False)
 
-        config = LoadConfig()
+        config = load_config()
 
         grid = Gtk.Grid(row_homogeneous=True, column_homogeneous=True)
         grid.props.margin_top = 20
-        grid.props.margin_left=20
+        grid.props.margin_left = 20
         grid.props.margin_right = 20
         grid.props.margin_bottom = 20
         self.add(grid)
@@ -54,39 +62,37 @@ class ConfigWindow(Gtk.Window):
         self.upload_type = check
         self.upload_type.set_active(config["automatic"])
 
-        okButton = Gtk.Button("Apply")
-        okButton.props.margin_top = 10
-        okButton.set_can_default(True)
-        grid.attach(okButton, 0, 1, 1, 1)
-        closeButton = Gtk.Button("Close")
-        closeButton.props.margin_top = 10
-        grid.attach(closeButton, 1, 1, 1, 1)
+        ok_button = Gtk.Button("Apply")
+        ok_button.props.margin_top = 10
+        ok_button.set_can_default(True)
+        grid.attach(ok_button, 0, 1, 1, 1)
+        close_button = Gtk.Button("Close")
+        close_button.props.margin_top = 10
+        grid.attach(close_button, 1, 1, 1, 1)
 
-        okButton.connect("clicked", self.Apply)
-        closeButton.connect("clicked", self.Close)
+        ok_button.connect("clicked", self.apply)
+        close_button.connect("clicked", lambda w: self.close())
 
-        self.set_default(okButton)
+        self.set_default(ok_button)
 
         # connect the main window to keypress
-        self.connect("key-press-event", self.KeyPress)
+        self.connect("key-press-event", self.key_press)
 
-    def KeyPress(self, widget, event):
-        # if Escape -> 65307 is the code
-        if event.keyval==65307:
+    def key_press(self, widget, event):
+        # if Escape -> 65307
+        if event.keyval == 65307:
             self.close()
 
-    def Apply(self, w):
+    def apply(self, w):
         config = {}
         config["automatic"] = self.upload_type.get_active()
-        SaveConfig(config)
-        ChangeHandler()
+        save_config(config)
+        change_handler()
         self.close()
 
-    def Close(self, w):
+    def on_destroy(self, w, e):
         self.close()
 
-    def OnDestroy(self, w, e):
-        self.close()
 
 def main():
     win = ConfigWindow()
