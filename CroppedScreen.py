@@ -38,7 +38,7 @@ class CroppedScreen(Gtk.Window):
         self.drawing_area.connect("button-press-event", self.mouse_down)
         self.drawing_area.connect("motion_notify_event", self.mouse_move)
         self.drawing_area.connect("button-release-event", self.mouse_release)
-        self.drawing_area.connect("key-press-event", self.key_press)
+        self.connect("key-press-event", self.key_press)
 
         # Set mouse cursor type to CROSS/PLUS
         self.set_cursor(Gdk.Cursor(Gdk.CursorType.CROSS))
