@@ -44,9 +44,9 @@ class CroppedScreen(Gtk.Window):
         self.set_cursor(Gdk.Cursor(Gdk.CursorType.CROSS))
 
         # Take full screenshot to show in drawing area
-        shot = Screenshot()
-        self.pixel_buffer = shot.take_shot(0, 0, shot.full_width,
-                                           shot.full_height, shot.root_window)
+        self.shot = Screenshot()
+        self.pixel_buffer = self.shot.take_shot(0, 0, self.shot.full_width,
+                                           self.shot.full_height, self.shot.root_window)
 
     def set_cursor(self, cursor):
         self.get_root_window().set_cursor(cursor)
@@ -55,6 +55,12 @@ class CroppedScreen(Gtk.Window):
         # Draw the full screen shot
         Gdk.cairo_set_source_pixbuf(cr, self.pixel_buffer, 0, 0)
         cr.paint()
+
+        # rectangle overlay
+        cr.set_source_rgba(1, 1, 1, 0.1)
+        cr.rectangle(0, 0,
+                     self.shot.full_width, self.shot.full_height)
+        cr.fill()
 
         # Draw rectangle for current selection
         if self.draw:

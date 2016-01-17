@@ -95,4 +95,6 @@ Find more about this project at:
 - [http://code-momo.herokuapp.com/blog/post/screeneat-delicious-screenshots](http://code-momo.herokuapp.com/blog/post/screeneat-delicious-screenshots/)
 - [http://codingparadox.herokuapp.com/blog/detail/screeneat-delicious-screenshots](http://codingparadox.herokuapp.com/blog/detail/screeneat-delicious-screenshots)
 
-> BTW, ScreenEat is open-source and you can contribute too if you like.
+### Contributing to this project
+ScreenEat is open-source and you can contribute too if you like.  
+If want to **contribute**, make sure you first read [CONTRIBUTING.md](https://github.com/NISH1001/ScreenEat/blob/master/CONTRIBUTING.md)
