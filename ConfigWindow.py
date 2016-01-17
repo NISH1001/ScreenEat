@@ -13,17 +13,17 @@ def load_config():
     try:
         configstr = open(path + "/config.json").read()
         config = json.loads(configstr)
-        # If 'automatic' key doesnt exit
-        if "automatic" not in config:
-            config["automatic"] = False
+        config.setdefault('automatic-upload', False)
+        config.setdefault('automatic-copy-url', True)
     except:
         print("Couldn't load configuration file: config.json")
     return config
 
 
 def save_config(config):
+    path = os.path.dirname(os.path.abspath(__file__))
     configstr = json.dumps(config, indent=4)
-    open("config.json", "w").write(configstr)
+    open(path + "/config.json", "w").write(configstr)
 
 
 def do_nothing():
@@ -35,8 +35,6 @@ change_handler = do_nothing
 
 """
 A configuration/settings GUI
-Contains:
-    'automatic' upload enable/disable
 """
 
 
@@ -60,15 +58,21 @@ class ConfigWindow(Gtk.Window):
         check = Gtk.CheckButton("Automatic Upload")
         grid.attach(check, 0, 0, 1, 1)
         self.upload_type = check
-        self.upload_type.set_active(config["automatic"])
+        self.upload_type.set_active(config["automatic-upload"])
+
+        # checkbox for url copyging -> automatic or not
+        check = Gtk.CheckButton("Automatic Copy Url")
+        grid.attach(check, 0, 1, 1, 1)
+        self.copy_url = check
+        self.copy_url.set_active(config["automatic-copy-url"])
 
         ok_button = Gtk.Button("Apply")
         ok_button.props.margin_top = 10
         ok_button.set_can_default(True)
-        grid.attach(ok_button, 0, 1, 1, 1)
+        grid.attach(ok_button, 0, 2, 1, 1)
         close_button = Gtk.Button("Close")
         close_button.props.margin_top = 10
-        grid.attach(close_button, 1, 1, 1, 1)
+        grid.attach(close_button, 1, 2, 1, 1)
 
         ok_button.connect("clicked", self.apply)
         close_button.connect("clicked", lambda w: self.close())
@@ -85,7 +89,8 @@ class ConfigWindow(Gtk.Window):
 
     def apply(self, w):
         config = {}
-        config["automatic"] = self.upload_type.get_active()
+        config["automatic-upload"] = self.upload_type.get_active()
+        config["automatic-copy-url"] = self.copy_url.get_active()
         save_config(config)
         change_handler()
         self.close()

@@ -21,7 +21,7 @@ Main ScreenEat GUI
 class ScreenEat(Gtk.Window):
 
     def __init__(self):
-        Gtk.Window.__init__(self, title="Screen Eat")
+        Gtk.Window.__init__(self, title="ScreenEat")
         self.set_position(Gtk.WindowPosition.CENTER_ALWAYS)
         self.set_resizable(False)
 
@@ -98,10 +98,10 @@ class ScreenEat(Gtk.Window):
         upload_section.add(button_upload)
 
         # create buttons for copy section:
-        button_copyclipboard = Gtk.Button(label="Copy url")
-        button_copyclipboard.connect("clicked", self.CopyUrl)
-        self.button_copyclipboard = button_copyclipboard
-        upload_section.add(button_copyclipboard)
+        button_copyurl = Gtk.Button(label="Copy url")
+        button_copyurl.connect("clicked", self.copy_url)
+        self.button_copyurl = button_copyurl
+        upload_section.add(button_copyurl)
 
         # Create misc section:
         misc_section = Gtk.Box(spacing=5)
@@ -147,12 +147,13 @@ class ScreenEat(Gtk.Window):
 
         self.show_all()
 
+        self.button_copyurl.hide()
+
         config = ConfigWindow.load_config()
 
         # if automatic upload then start uploading now
-        if (config["automatic"]):
+        if (config["automatic-upload"]):
             self.upload(None)
-        self.button_copyclipboard.hide()
 
     def show_config(self, widget):
         win = ConfigWindow.ConfigWindow()
@@ -169,7 +170,7 @@ class ScreenEat(Gtk.Window):
         if ctrl and keyname == "s":
             self.save_image(widget, self.pixel_buffer)
 
-    def CopyUrl(self, widget):
+    def copy_url(self, widget):
         clipboard = Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)
         clipboard.set_text(self.url, -1)
         clipboard.store()
@@ -194,7 +195,10 @@ class ScreenEat(Gtk.Window):
                                          result['link'] + "</a>")
             self.button_upload.hide()
             self.button_upload.set_sensitive(True)
-            self.button_copyclipboard.show()
+            self.button_copyurl.show()
+            config = ConfigWindow.load_config()
+            if config["automatic-copy-url"]:
+                self.copy_url(None)
         else:
             self.label_status.set_text("Upload Failed!")
             self.button_upload.set_sensitive(True)

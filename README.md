@@ -84,7 +84,9 @@ The settings are stored in `config.json` file and can be changed manually or thr
 
 ##### Options available
 
-`automatic` : Set whether to automatic upload immediately after taking the screenshot
+`automatic-upload` : Set whether to automatically upload image immediately after taking the screenshot
+
+`automatic-copy-url` : Set whether to automatically copy url after uploading is completed
 
 ----
 

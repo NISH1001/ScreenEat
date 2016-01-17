@@ -64,7 +64,7 @@ class CroppedScreen(Gtk.Window):
 
         # Draw rectangle for current selection
         if self.draw:
-            cr.set_source_rgba(1, 1, 1, 0.3)
+            cr.set_source_rgba(0.5, 0.5, 0.5, 0.3)
             cr.rectangle(self.rect_x, self.rect_y,
                          self.rect_width, self.rect_height)
             cr.fill()

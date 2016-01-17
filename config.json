@@ -1,3 +1,4 @@
 {
-    "automatic": false
+    "automatic-upload": false,
+    "automatic-copy-url": true
 }
