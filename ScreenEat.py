@@ -4,9 +4,11 @@ import platform
 import sys
 import os
 import time
+import gi
+gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk, Gdk, GdkPixbuf, GObject
 import ConfigWindow
-from Screenshot import Screenshot
+from Screenshot import Screenshot, ManualError
 from threading import Thread
 from ImgurUploader import ImgurUploader
 from CroppedScreen import CroppedScreen
@@ -37,14 +39,7 @@ class ScreenEat(Gtk.Window):
         shot = Screenshot()
         arguments = sys.argv[1::]
 
-        if "--active" in arguments:
-            pixel_buffer = shot.take_shot(0, 0, shot.active_width,
-                                          shot.active_height,
-                                          shot.active_window)
-            imgwidth = shot.active_width
-            imgheight = shot.active_height
-
-        elif "--cropped" in arguments:
+        if "--cropped" in arguments:
             win = CroppedScreen()
             win.connect("delete-event", Gtk.main_quit)
             win.set_modal(True)
@@ -54,26 +49,29 @@ class ScreenEat(Gtk.Window):
             Gdk.threads_enter()
             Gtk.main()
             Gdk.threads_leave()
+            # If no rectangle is drawn, no need to get a screenshot
+            if (win.rect_width * win.rect_height == 0):
+                raise ManualError("No crop rectangle defined. Exiting.")
 
-            temp = win.pixel_buffer
-            pixel_buffer = temp.new_subpixbuf(win.rect_x, win.rect_y,
+            buff = win.pixel_buffer
+            pixel_buffer = buff.new_subpixbuf(win.rect_x, win.rect_y,
                                               win.rect_width, win.rect_height)
-            imgwidth = win.rect_width
-            imgheight = win.rect_height
-
+        elif "--active" in arguments:
+            pixel_buffer = shot.take_shot(0, 0, shot.active_width,
+                                          shot.active_height,
+                                          shot.active_window)
         else:
             pixel_buffer = shot.take_shot(0, 0, shot.full_width,
                                           shot.full_height, shot.root_window)
-            imgwidth = shot.full_width
-            imgheight = shot.full_height
 
-        # save shot for future
+        # save shot for future, if fails then exit
         shot.save_shot(pixel_buffer, "")
+
         self.filename = shot.filename
         self.url = ""
 
         # Create image preview
-        ratio = imgheight/imgwidth
+        ratio = pixel_buffer.get_height()/pixel_buffer.get_width()
 
         if ratio > 1:
             scaled = pixel_buffer.scale_simple(500/ratio, 500,
@@ -149,11 +147,11 @@ class ScreenEat(Gtk.Window):
 
         self.button_copyurl.hide()
 
-        config = ConfigWindow.load_config()
-
         # if automatic upload then start uploading now
+        config = ConfigWindow.load_config()
         if (config["automatic-upload"]):
             self.upload(None)
+
 
     def show_config(self, widget):
         win = ConfigWindow.ConfigWindow()
@@ -230,7 +228,7 @@ class ScreenEat(Gtk.Window):
             filename = dialog.get_filename()
             if "." not in filename:
                 filename += ".jpg"
-            print(dialog.get_filename())
+            print("Saving screenshot as", dialog.get_filename())
             shot = Screenshot()
             shot.save_shot(pixbuf, filename)
         dialog.destroy()
@@ -241,13 +239,16 @@ def main():
     if platform.system() == 'Linux':
         Gdk.threads_init()
 
-    win = ScreenEat()
-    Gdk.threads_enter()
-    Gtk.main()
-    Gdk.threads_leave()
     try:
+        win = ScreenEat()
+        Gdk.threads_enter()
+        Gtk.main()
+        Gdk.threads_leave()
         os.remove(win.filename)
-    except:
+    except OSError:
+        pass
+    except ManualError as e:
+        e.display()
         pass
 
 

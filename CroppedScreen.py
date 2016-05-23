@@ -116,8 +116,8 @@ class CroppedScreen(Gtk.Window):
     def key_press(self, widget, event):
         # if Escape -> 65307 is the code
         if event.keyval == 65307:
-            self.set_cursor(Gdk.Cursor(Gdk.CursorType.LEFT_PTR))
             self.close()
+            self.set_cursor(Gdk.Cursor(Gdk.CursorType.LEFT_PTR))
 
 
 def main():
