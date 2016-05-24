@@ -2,6 +2,9 @@
 __pycache__/
 *.py[cod]
 
+# temporary folder
+tmp/
+
 *.png
 *.jpg
 *.jpeg

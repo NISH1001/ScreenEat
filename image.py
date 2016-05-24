@@ -1,5 +1,7 @@
-from datetime import datetime
-
+import os
+import sys
+import time
+# from datetime import datetime
 
 class Image:
     """Image representing a pixel buffer."""
@@ -7,22 +9,30 @@ class Image:
     def __init__(self, pixel_buffer):
         self.pixel_buffer = pixel_buffer
 
-        # Generate random default filename for this image.
-        self.generate_filename()
-
-    def generate_filename(self):
+    def _generate_filename(self):
         """Generate a unique filename for the image based on timestamp."""
+        # timestamp = datetime.now().strftime("_%y_%m_%d_%H_%M_%S_%f")
+        timestamp = "_%s" % (int(time.time() * 1000))
+        return "screeneat" + timestamp + ".jpg"
 
-        suffix = datetime.now().strftime("_%y%m%d_%H%M%S")
-        prefix = "screenshot"
-        self.filename = prefix + suffix + ".jpg"
+    def digest(self, directory, filename=None):
+        """Save image to file, with given filename and directory."""
+        # make it posix and windows safe, also expand user directory
+        directory = os.path.abspath(os.path.expanduser(directory))
+        # Create a directory if not existing
+        if not os.path.exists(directory):
+            os.makedirs(directory)
 
-    def digest(self, filename=None):
-        """Save image to file, optionally with given filename."""
+        # Generate filename using timestamp if not provided
+        if not filename:
+            filename = self._generate_filename()
+        # Add extension if not already in the filename
+        if filename[filename.rfind(".")+1:].lower() not in {'jpg', 'jpeg'}:
+            filename = filename + ".jpg"
+        # Join directory with the filename
+        filename = os.path.join(directory, filename)
 
-        if filename:
-            self.filename = filename
-        self.pixel_buffer.savev(self.filename, "jpeg", (), ())
+        self.pixel_buffer.savev(filename, "jpeg", (), ())
 
     def crop(self, x, y, width, height):
         """Crop the image to given rectangle."""
