@@ -3,6 +3,7 @@ import sys
 import json
 from collections import defaultdict
 
+
 class Config:
     """Configuration with save/load functionality."""
 
@@ -27,4 +28,4 @@ class Config:
         if not os.path.exists(directory):
             os.makedirs(directory)
         with open(self.filename, "w") as f:
-            f.write(json.dumps(self.data))
+            f.write(json.dumps(self.data, indent=4))

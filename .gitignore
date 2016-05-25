@@ -4,6 +4,7 @@ __pycache__/
 
 # temporary folder
 tmp/
+data/
 
 *.png
 *.jpg

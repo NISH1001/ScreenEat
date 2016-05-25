@@ -3,6 +3,7 @@
 import unittest
 from screen import Screen
 from config import Config
+from imgur_public_uploader import ImgurPublicUploader
 
 
 class Taste(unittest.TestCase):
