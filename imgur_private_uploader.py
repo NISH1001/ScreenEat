@@ -20,20 +20,20 @@ class ImgurPrivateUploader(Uploader):
                 "Bearer {0}".format(self.auth.data["access_token"])}
 
     def isAuthenticated(self):
-        return (self.auth.data["access_token"]!="" and
-                self.auth.data["refresh_token"]!="")
+        return (self.auth.data["access_token"] != "" and
+                self.auth.data["refresh_token"] != "")
 
     def tokenUrl(self):
-        url = ("https://api.imgur.com/oauth2/authorize?"+
+        url = ("https://api.imgur.com/oauth2/authorize?" +
                "client_id={client_id}&response_type=pin&state=anything")
         return url.format(client_id=self.auth.data["client_id"])
 
     def getAccessToken(self, pin):
         url = "https://api.imgur.com/oauth2/token/"
-        payload = {"client_id" : self.auth.data["client_id"],
-                   "client_secret" : self.auth.data["client_secret"],
+        payload = {"client_id": self.auth.data["client_id"],
+                   "client_secret": self.auth.data["client_secret"],
                    "pin": pin,
-                   "grant_type" : "pin"}
+                   "grant_type": "pin"}
 
         rj = self.request(url, payload)
         self.auth.data["access_token"] = rj['access_token']
@@ -41,10 +41,10 @@ class ImgurPrivateUploader(Uploader):
 
     def renewAccessToken(self):
         url = r"https://api.imgur.com/oauth2/token/"
-        payload = {"client_id" : self.auth.data["client_id"],
-                   "client_secret" : self.auth.data["client_secret"],
+        payload = {"client_id": self.auth.data["client_id"],
+                   "client_secret": self.auth.data["client_secret"],
                    "refresh_token": self.auth.data["refresh_token"],
-                   "grant_type" : "refresh_token"}
+                   "grant_type": "refresh_token"}
 
         rj = self.request(url, payload)
         self.auth.data["access_token"] = rj['access_token']

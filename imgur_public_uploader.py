@@ -29,5 +29,3 @@ if __name__ == "__main__":
     imguru = ImgurPublicUploader(auth)
     print(imguru.upload(filename))
     auth.save()
-
-

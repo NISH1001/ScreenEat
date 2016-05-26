@@ -1,7 +1,7 @@
 import os
 import sys
 import time
-# from datetime import datetime
+
 
 class Image:
     """Image representing a pixel buffer."""
@@ -11,25 +11,29 @@ class Image:
 
     def _generate_filename(self):
         """Generate a unique filename for the image based on timestamp."""
-        # timestamp = datetime.now().strftime("_%y_%m_%d_%H_%M_%S_%f")
+
         timestamp = "_%s" % (int(time.time() * 1000))
         return "screeneat" + timestamp + ".jpg"
 
     def digest(self, directory, filename=None):
         """Save image to file, with given filename and directory."""
-        # make it posix and windows safe, also expand user directory
+
+        # Make path posix and windows safe, expanding the user directory.
         directory = os.path.abspath(os.path.expanduser(directory))
-        # Create a directory if not existing
+
+        # Create the directory if doesn't exist.
         if not os.path.exists(directory):
             os.makedirs(directory)
 
-        # Generate filename using timestamp if not provided
+        # Generate filename using timestamp if not provided.
         if not filename:
             filename = self._generate_filename()
-        # Add extension if not already in the filename
+
+        # Add extension if not already in the filename.
         if filename[filename.rfind(".")+1:].lower() not in {'jpg', 'jpeg'}:
             filename = filename + ".jpg"
-        # Join directory with the filename
+
+        # Join directory with the filename.
         filename = os.path.join(directory, filename)
 
         self.pixel_buffer.savev(filename, "jpeg", (), ())
