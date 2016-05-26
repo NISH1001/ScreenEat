@@ -6,6 +6,7 @@ __pycache__/
 tmp/
 data/
 
+*~
 *.png
 *.jpg
 *.jpeg
