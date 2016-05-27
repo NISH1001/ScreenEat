@@ -71,11 +71,18 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="tearoff_title" translatable="yes">Select Upload Mode</property>
+                    <property name="has_entry">True</property>
                     <property name="popup_fixed_width">False</property>
                     <items>
                       <item id="0" translatable="yes">Imgur Private Upload</item>
                       <item id="1" translatable="yes">Imgur Anonymous Upload</item>
                     </items>
+                    <child internal-child="entry">
+                      <object class="GtkEntry" id="auth_mode_entry">
+                        <property name="can_focus">False</property>
+                        <property name="placeholder_text" translatable="yes">Select Upload Method</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="expand">True</property>
