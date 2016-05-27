@@ -7,7 +7,7 @@
     <property name="can_focus">False</property>
     <property name="stock">gtk-dialog-authentication</property>
   </object>
-  <template class="private_authentication" parent="GtkDialog">
+  <object class="GtkDialog" id="private_authentication_dialog">
     <property name="can_focus">False</property>
     <property name="resizable">False</property>
     <property name="window_position">center</property>
@@ -169,5 +169,5 @@
         </child>
       </object>
     </child>
-  </template>
+  </object>
 </interface>

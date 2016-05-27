@@ -1,22 +1,27 @@
 # ScreenEat #
 Screenshots made delicious and easy.
 
-## Authenticating with Imgur ##
+## ScreenEat with Imgur ##
 
-Go to https://api.imgur.com/oauth2/addclient and register an application with the
-following details, so that you can start uploading your snapshots using ScreenEat.
+Before you can start uploading snapshots using ScreenEat, you would need an imgur account.
 
-Field                       | Data
---------------------------- | -------------------------------------------------------------------------------------
+1. Create an imgur account.
+2. Register an application from https://api.imgur.com/oauth2/addclient.
+
+Enter the following details for registration.
+
+Field                       | Detail
+--------------------------- | ------------------
 Application name            | ScreenEat
-Authorization type          | OAuth 2 authorization without callback <br> Anonymous user without user authorization
 Authorization callback URL  | *Blank*
 Website                     | *Optional*
 Email                       | your email address
 Description                 | *Optional*
 
+Choose the Authorization type that best suits your interest.
 
-Authorization type                          | Details
+Authorization type                          | Detail
 ------------------------------------------- | -------------------------------------------------
-OAuth2 authorization without callback       | It allows uploading private snapshots.
-Anonymous user without user authorization   | It allows uploading public snapshots anonymously.
+OAuth2 authorization without callback       | Allows uploading private snapshots.
+Anonymous user without user authorization   | Allows uploading public snapshots anonymously.
+

@@ -2,7 +2,7 @@
 <!-- Generated with glade 3.20.0 -->
 <interface>
   <requires lib="gtk+" version="3.20"/>
-  <template class="public_authentication" parent="GtkDialog">
+  <object class="GtkDialog" id="public_authentication_dialog">
     <property name="can_focus">False</property>
     <property name="resizable">False</property>
     <property name="window_position">center</property>
@@ -95,5 +95,5 @@
         </child>
       </object>
     </child>
-  </template>
+  </object>
 </interface>
