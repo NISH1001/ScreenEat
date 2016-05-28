@@ -18,8 +18,9 @@
     <property name="can_focus">False</property>
     <property name="stock">gtk-save</property>
   </object>
-  <object class="GtkWindow" id="screeneat">
+  <object class="GtkWindow" id="main_window">
     <property name="can_focus">False</property>
+    <property name="resizable">False</property>
     <property name="window_position">center</property>
     <property name="gravity">center</property>
     <child>
@@ -42,14 +43,16 @@
           <object class="GtkBox">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="margin_left">5</property>
-            <property name="margin_right">5</property>
-            <property name="margin_top">5</property>
-            <property name="margin_bottom">5</property>
+            <property name="margin_left">8</property>
+            <property name="margin_right">8</property>
+            <property name="margin_top">8</property>
+            <property name="margin_bottom">8</property>
+            <property name="spacing">8</property>
             <child>
               <object class="GtkBox">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="spacing">4</property>
                 <child>
                   <object class="GtkButton" id="upload_btn">
                     <property name="label" translatable="yes">Upload</property>
@@ -101,7 +104,7 @@
               <object class="GtkBox">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="spacing">5</property>
+                <property name="spacing">4</property>
                 <property name="homogeneous">True</property>
                 <child>
                   <object class="GtkButton" id="save_to_disk_btn">

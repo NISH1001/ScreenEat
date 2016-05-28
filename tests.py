@@ -15,11 +15,11 @@ class Taste(unittest.TestCase):
 
     def test_full_capture(self):
         image = Screen().eat()
-        image.digest("~/ScreenEat/tmp", "full.jpg")
+        image.digest("tmp", "full.jpg")
 
     def test_active_capture(self):
         image = Screen(active=True).eat()
-        image.digest("~/ScreenEat/tmp/", "active.snapshot")
+        image.digest("tmp/", "active.snapshot")
 
     def test_cropped_capture(self):
         # Capture a image and send it to CropWindow.
@@ -33,7 +33,7 @@ class Taste(unittest.TestCase):
             # After CropWindow exists, use the rectangle to crop the image.
             image.crop(win.rect.x, win.rect.y, win.rect.width, win.rect.height)
             # Then save it.
-            image.digest("~/ScreenEat/tmp/")
+            image.digest("tmp/")
 
     def test_config(self):
         configfile = "~/ScreenEat/tmp/inner/config.json"
