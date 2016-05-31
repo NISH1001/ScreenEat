@@ -43,7 +43,7 @@ class CropWindow(Gtk.Window):
 
     def _on_draw(self, widget, context):
         # First the draw the image.
-        Gdk.cairo_set_source_pixbuf(context, self.image.pixel_buffer, 0, 0)
+        Gdk.cairo_set_source_pixbuf(context, self.image.pixbuf, 0, 0)
         context.paint()
 
         # Next draw the cropping rectangle.
