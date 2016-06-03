@@ -44,6 +44,8 @@ class Image:
 
         self.pixbuf.savev(filename, "jpeg", (), ())
 
+        return filename
+
     def crop(self, x, y, width, height):
         """Crop the image to given rectangle."""
 

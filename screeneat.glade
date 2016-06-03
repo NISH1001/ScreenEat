@@ -89,6 +89,7 @@
                     <property name="sensitive">False</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
+                    <property name="no_show_all">True</property>
                     <property name="tooltip_text" translatable="yes">Copy URL to clipboard</property>
                     <signal name="clicked" handler="on_copy_url_clicked" swapped="no"/>
                   </object>
@@ -337,8 +338,8 @@
                     <property name="has_entry">True</property>
                     <property name="popup_fixed_width">False</property>
                     <items>
-                      <item id="0" translatable="yes">Imgur Private Upload</item>
-                      <item id="1" translatable="yes">Imgur Public Upload</item>
+                      <item id="0" translatable="yes">Imgur Public Upload</item>
+                      <item id="1" translatable="yes">Imgur Private Upload</item>
                     </items>
                     <child internal-child="entry">
                       <object class="GtkEntry">
@@ -536,6 +537,7 @@
                         <property name="receives_default">True</property>
                         <property name="tooltip_text" translatable="yes">Open browser to get access pin.</property>
                         <property name="image">open_browser</property>
+                        <signal name="clicked" handler="on_private_open_browser_clicked" swapped="no"/>
                       </object>
                       <packing>
                         <property name="expand">False</property>
