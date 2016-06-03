@@ -174,6 +174,10 @@ privateauth = Config(privateauth_filename)
 publicauth = Config(publicauth_filename)
 config = Config(config_filename)
 
+# Get the Gui from glade file
+builder = Gtk.Builder()
+builder.add_from_file(glade_filename)
+
 # Take a screenshot
 image = Screen(active=(argument=="--active")).eat()
 
@@ -194,19 +198,20 @@ GObject.threads_init()
 if platform.system() == 'Linux':
     Gdk.threads_init()
 
-# Auto upload file
-if config.data["autoupload"]:
-    upload_image()
-
-# Get the Gui from glade file
-builder = Gtk.Builder()
-builder.add_from_file(glade_filename)
-
 # Set preview image from snapshot
 preview = image.copy()
 preview.scale(500)
 screenshot_image = builder.get_object("screenshot_image")
 screenshot_image.set_from_pixbuf(preview.pixbuf)
+
+# Auto upload file
+if config.data["autoupload"]:
+    upload_image(None)
+
+# Display the main window
+main_window = builder.get_object("main_window")
+main_window.show_all()
+
 
 # Connect signals to widgets
 handler = {
@@ -219,10 +224,6 @@ handler = {
            "on_preferences_clicked" : open_preferences
         }
 builder.connect_signals(handler)
-
-# Display the main window
-main_window = builder.get_object("main_window")
-main_window.show_all()
 
 # Enter main loop
 Gdk.threads_enter()
