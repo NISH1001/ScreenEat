@@ -40,6 +40,7 @@ class CropWindow(Gtk.Window):
         self.drawing_area.connect("motion_notify_event", self._on_mouse_move)
         self.drawing_area.connect("button-release-event", self._on_mouse_up)
         self.connect("key-press-event", self._on_key_press)
+        self.connect("delete-event", Gtk.main_quit)
 
     def _on_draw(self, widget, context):
         # First the draw the image.

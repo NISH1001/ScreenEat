@@ -1,220 +1,230 @@
+#!/usr/bin/python
+
 import os
 import sys
+import platform
 import webbrowser
-
+from threading import Thread
+from time import sleep
 import gi
 gi.require_version('Gtk', '3.0')
-from gi.repository import Gtk, Gdk
+from gi.repository import Gtk, Gdk, GObject
 
 from config import Config
 from screen import Screen
-from exception import AuthError
+from exception import AuthError, ManualError, Error
 from crop_window import CropWindow
 from imgur_public_uploader import ImgurPublicUploader
 from imgur_private_uploader import ImgurPrivateUploader
 
 
-def upload():
-    #TODO: window hangs while working
-    #TODO: not windows compatible
+def upload_worker():
     filename = image.digest("/tmp")
-
+    upload_btn = builder.get_object("upload_btn")
+    copy_url_btn = builder.get_object("copy_url_btn")
     status = builder.get_object("status_label")
+
+    Gdk.threads_enter()
     status.set_text("Uploading")
+    upload_btn.set_sensitive(False)
+    Gdk.threads_leave()
 
-    if config.data["authmode"] == "":
-        status.set_text("Uploader not selected.")
-        return
-    elif config.data["authmode"] == 0:
-        uploader = ImgurPublicUploader(publicauth)
-        if not uploader.isConfigured():
-            status.set_text("Uploader not configured.")
-            return
+    try:
+        # When authmode is not configured
+        if config.data["authmode"] == "":
+            raise ManualError("Uploader not selected.")
 
-
-        try:
+        # When public_imgur authmode is selected
+        elif config.data["authmode"] == 0:
+            uploader = ImgurPublicUploader(publicauth)
+            if not uploader.isConfigured():
+                raise ManualError("Uploader not configured.")
+            # can raise AuthError
             url = uploader.upload(filename)
-        except AuthError as ae:
-            status.set_text(ae.message)
-            return
-    elif config.data["authmode"] == 1:
 
-        uploader = ImgurPrivateUploader(privateauth)
-        if not uploader.isConfigured():
-            status.set_text("Uploader not configured.")
-            return
+        # When private_imgur authmode is selected
+        elif config.data["authmode"] == 1:
 
-        access_pin = privateauth.data["access_pin"]
-        if access_pin:
-            try:
+            uploader = ImgurPrivateUploader(privateauth)
+            if not uploader.isConfigured():
+                raise ManualError("Uploader not configured.")
+
+            access_pin = privateauth.data["access_pin"]
+            # If there is an access pin, then get new tokens from the pin
+            if access_pin:
+                # Pin mismatch Auth error
                 uploader.getAccessToken(access_pin)
-            except AuthError as ae:
-                # Pin mismatch
-                status.set_text(ae.message)
-                return
-            # need to get token from access pin for the first time only
-            del privateauth.data["access_pin"]
-            privateauth.save()
-        else:
-            if not uploader.isAuthenticated():
-                status.set_text("Access Pin required.")
-                return
-
-        try:
+                # need to get token from access pin for the first time only
+                del privateauth.data["access_pin"]
+                privateauth.save()
+            else:
+                if not uploader.isAuthenticated():
+                    raise ManualError("Access Pin required")
+            # can raise AuthError
             url = uploader.upload(filename)
-        except AuthError as ae:
-            # After access token is successfully retrived, AuthError
-            # is generally caused by expired token
-            uploader.renewAccessToken()
-            #TODO: Error not caught for this code
-            url = uploader.upload(filename)
+    except Error as e:
+        Gdk.threads_enter()
+        # DEBUG:
+        print(e.message)
+        status.set_text(e.message)
+        upload_btn.set_sensitive(True)
+        Gdk.threads_leave()
+        return
 
-        privateauth.save()
-
+    Gdk.threads_enter()
+    # set status as url
     status.set_text(url)
     # hide Upload button
-    button = builder.get_object("upload_btn")
-    button.set_sensitive(False)
-    button.hide()
+    upload_btn.hide()
+    upload_btn.set_sensitive(True)
     # show CopyUrl button
-    button = builder.get_object("copy_url_btn")
-    button.set_sensitive(True)
-    button.show()
+    copy_url_btn.show()
+    copy_url_btn.set_sensitive(True)
+    Gdk.threads_leave()
 
     # Auto copy url
     if config.data["autocopy"]:
         copy_url()
 
-def copy_url():
+def upload_image(button):
+    thread = Thread(target=upload_worker)
+    thread.start()
+
+def copy_url(button):
     status = builder.get_object("status_label")
     clipboard = Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)
     clipboard.set_text(status.get_text(), -1)
     clipboard.store()
 
-def copy_image():
+def copy_image(button):
     clipboard = Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)
     clipboard.set_image(image.pixbuf)
     clipboard.store()
 
-class Handler:
-    def on_window_main_destroy(self, *args):
-        Gtk.main_quit(*args)
+def open_browser(button):
+    url = ImgurPrivateUploader.tokenUrl(privateauth.data["client_id"])
+    webbrowser.open(url)
 
-    def on_upload_clicked(self, button):
-        upload()
+def open_save_to_disk(button):
+    dialog = builder.get_object("filechooser_dialog")
+    dialog.set_current_name(image.generate_filename())
 
-    def on_copy_url_clicked(self, button):
-        copy_url()
+    dialog.show_all()
+    response = dialog.run()
+    if response == 1:
+        directory = os.path.dirname(dialog.get_filename())
+        filename = os.path.basename(dialog.get_filename())
+        image.digest(directory, filename)
+    dialog.hide()
 
-    def on_copy_to_clipboard_clicked(self, button):
-        copy_image()
+def open_preferences(button):
+    dialog = builder.get_object("preferences_dialog")
 
-    def on_private_open_browser_clicked(self, button):
-        url = ImgurPrivateUploader.tokenUrl(privateauth.data["client_id"])
-        webbrowser.open(url)
+    public_client_id = builder.get_object("public_client_id_text")
+    public_client_id.set_text(publicauth.data["client_id"])
 
-    def on_save_to_disk_clicked(self, button):
-        dialog = builder.get_object("filechooser_dialog")
-        dialog.set_current_name(image.generate_filename())
+    private_client_id = builder.get_object("private_client_id_text")
+    private_client_id.set_text(privateauth.data["client_id"])
 
-        dialog.show_all()
-        response = dialog.run()
-        if response == 1:
-            directory = os.path.dirname(dialog.get_filename())
-            filename = os.path.basename(dialog.get_filename())
-            image.digest(directory, filename)
-        dialog.hide()
+    private_client_secret = builder.get_object("private_client_secret_text")
+    private_client_secret.set_text(privateauth.data["client_secret"])
 
-    def on_preferences_clicked(self, button):
-        dialog = builder.get_object("preferences_dialog")
+    private_access_pin = builder.get_object("private_access_pin_text")
+    private_access_pin.set_text(privateauth.data["access_pin"])
 
-        public_client_id = builder.get_object("public_client_id_text")
-        public_client_id.set_text(publicauth.data["client_id"])
+    authmode_combo = builder.get_object("authmode_combo")
+    authmode = config.data["authmode"]
+    if authmode != "":
+        authmode_combo.set_active(authmode)
 
-        private_client_id = builder.get_object("private_client_id_text")
-        private_client_id.set_text(privateauth.data["client_id"])
+    autocopy_check = builder.get_object("autocopy_check")
+    autocopy_check.set_active(config.data["autocopy"])
 
-        private_client_secret = builder.get_object("private_client_secret_text")
-        private_client_secret.set_text(privateauth.data["client_secret"])
-
-        private_access_pin = builder.get_object("private_access_pin_text")
-        private_access_pin.set_text(privateauth.data["access_pin"])
-
-        authmode_combo = builder.get_object("authmode_combo")
-        authmode = config.data["authmode"]
-        if authmode != "":
-            authmode_combo.set_active(authmode)
-
-        autocopy_check = builder.get_object("autocopy_check")
-        autocopy_check.set_active(config.data["autocopy"])
-
-        autoupload_check = builder.get_object("autoupload_check")
-        autoupload_check.set_active(config.data["autoupload"])
+    autoupload_check = builder.get_object("autoupload_check")
+    autoupload_check.set_active(config.data["autoupload"])
 
 
-        dialog.show_all()
-        response = dialog.run()
-        if response == 1:
-            publicauth.data["client_id"] = public_client_id.get_text()
-            publicauth.save()
+    dialog.show_all()
+    response = dialog.run()
+    if response == 1:
+        publicauth.data["client_id"] = public_client_id.get_text()
+        publicauth.save()
 
-            privateauth.data["client_id"] = private_client_id.get_text()
-            privateauth.data["client_secret"] = private_client_secret.get_text()
-            privateauth.data["access_pin"] = private_access_pin.get_text()
-            privateauth.save()
+        privateauth.data["client_id"] = private_client_id.get_text()
+        privateauth.data["client_secret"] = private_client_secret.get_text()
+        privateauth.data["access_pin"] = private_access_pin.get_text()
+        privateauth.save()
 
-            config.data["authmode"] = authmode_combo.get_active()
-            config.data["autoupload"] = autoupload_check.get_active()
-            config.data["autocopy"] = autocopy_check.get_active()
-            config.save()
+        config.data["authmode"] = authmode_combo.get_active()
+        config.data["autoupload"] = autoupload_check.get_active()
+        config.data["autocopy"] = autocopy_check.get_active()
+        config.save()
 
-        dialog.hide()
+    dialog.hide()
 
 
-arguments = sys.argv[1::]
-if "--cropped" in arguments:
-    image = Screen().eat()
+argument = sys.argv[1] if len(sys.argv)>1 else ""
+privateauth_filename = "config/privateauth.json"
+publicauth_filename = "config/publicauth.json"
+config_filename = "config/config.json"
+glade_filename = "screeneat.glade"
+
+# Load configuration files
+privateauth = Config(privateauth_filename)
+publicauth = Config(publicauth_filename)
+config = Config(config_filename)
+
+# Take a screenshot
+image = Screen(active=(argument=="--active")).eat()
+
+# Select snapshot mode
+if argument=="--cropped":
+    # Create a window to crop snaphost
     win = CropWindow(image)
-    win.connect("delete-event", Gtk.main_quit)
     win.show_all()
     Gtk.main()
-
+    # If user exited then no need to save the snapshot
     if win.user_terminated:
         sys.exit(0)
     # After CropWindow exists, use the rectangle to crop the image.
     image.crop(win.rect.x, win.rect.y, win.rect.width, win.rect.height)
 
-elif "--active" in arguments:
-    image = Screen(active=True).eat()
-else:
-    image = Screen().eat()
+# Initialize threads
+GObject.threads_init()
+if platform.system() == 'Linux':
+    Gdk.threads_init()
 
-preview = image.copy()
-preview.scale()
+# Auto upload file
+if config.data["autoupload"]:
+    upload_image()
 
-privateauth_filename = "config/privateauth.json"
-privateauth = Config(privateauth_filename)
-
-publicauth_filename = "config/publicauth.json"
-publicauth = Config(publicauth_filename)
-
-config_filename = "config/config.json"
-config = Config(config_filename)
-
-glade_filename = "screeneat.glade"
+# Get the Gui from glade file
 builder = Gtk.Builder()
 builder.add_from_file(glade_filename)
 
-builder.connect_signals(Handler())
+# Set preview image from snapshot
+preview = image.copy()
+preview.scale(500)
+screenshot_image = builder.get_object("screenshot_image")
+screenshot_image.set_from_pixbuf(preview.pixbuf)
 
-img = builder.get_object("screenshot_image")
-img.set_from_pixbuf(preview.pixbuf)
+# Connect signals to widgets
+handler = {
+           "on_window_main_destroy" : Gtk.main_quit,
+           "on_upload_clicked" : upload_image,
+           "on_copy_url_clicked" : copy_url,
+           "on_copy_to_clipboard_clicked" : copy_image,
+           "on_private_open_browser_clicked" : open_browser,
+           "on_save_to_disk_clicked" : open_save_to_disk,
+           "on_preferences_clicked" : open_preferences
+        }
+builder.connect_signals(handler)
 
-window = builder.get_object("main_window")
-window.show_all()
+# Display the main window
+main_window = builder.get_object("main_window")
+main_window.show_all()
 
-# Auto copy url
-if config.data["autoupload"]:
-    upload()
-
+# Enter main loop
+Gdk.threads_enter()
 Gtk.main()
+Gdk.threads_leave()

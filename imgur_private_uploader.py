@@ -1,9 +1,8 @@
 import webbrowser
-import requests
 import pprint
 from uploader import Uploader
-from exception import AuthError
 from config import Config
+from exception import AuthError
 
 
 class ImgurPrivateUploader(Uploader):
@@ -54,3 +53,20 @@ class ImgurPrivateUploader(Uploader):
         rj = self.request(url, payload)
         self.auth.data["access_token"] = rj['access_token']
         self.auth.data["refresh_token"] = rj['refresh_token']
+
+    def upload(self, filename):
+
+        try:
+            url = Uploader.upload(self, filename)
+        except AuthError as ae:
+            # After access token is successfully retrived,
+            # AuthError is generally caused by expired token
+            # TODO: Getting timestamp or reading json file for exact error
+            renewAccessToken()
+            # Try to upload once again
+            url = Uploader.upload(self, filename)
+            # Save any changes by renewAccessToken
+            self.auth.save()
+
+        return url
+

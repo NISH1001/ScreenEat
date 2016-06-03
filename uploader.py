@@ -2,7 +2,7 @@ import requests
 import base64
 from abc import ABCMeta
 from abc import abstractmethod
-from exception import AuthError
+from exception import AuthError, ManualError
 
 
 class Uploader(metaclass=ABCMeta):
@@ -23,11 +23,15 @@ class Uploader(metaclass=ABCMeta):
                 'title':'ScreenEat Upload'}
 
     def request(self, url, payload, headers=None):
-        # make the upload, ensuring that the data, headers are included
-        if headers:
-            r = requests.post(url, data=payload, headers=headers, verify=True)
-        else:
-            r = requests.post(url, data=payload, verify=True)
+        try:
+            # make the upload, ensuring that the data, headers are included
+            if headers:
+                r = requests.post(url, data=payload, headers=headers, verify=True)
+            else:
+                r = requests.post(url, data=payload, verify=True)
+        except Exception:
+            #TODO: better expcetion handling
+            raise ManualError("Error in connection.")
         # save the json response
         rj = r.json()
         # check for success
