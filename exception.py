@@ -4,11 +4,13 @@ class Error(Exception):
     def __init__(self):
         self.message = "User defined error occured."
 
+
 class AuthError(Error):
     """Exception class related to authentication process for upload."""
 
     def __init__(self, code, message):
         self.message = str(code) + " " + message
+
 
 class ManualError(Error):
     """Exception class related to define less generic exceptions."""

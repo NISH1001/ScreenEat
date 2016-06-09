@@ -3,8 +3,9 @@ import sys
 import time
 
 import gi
-gi.require_version('Gtk', '3.0')
+gi.require_version('Gtk', '3.0')  # NOQA -- disable pep8 E402 warning
 from gi.repository import GdkPixbuf
+
 
 class Image:
     """Image representing a pixel buffer."""

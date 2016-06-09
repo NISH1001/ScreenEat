@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python3
 
 import os
 import sys
@@ -7,7 +7,7 @@ import webbrowser
 from threading import Thread
 from time import sleep
 import gi
-gi.require_version('Gtk', '3.0')
+gi.require_version('Gtk', '3.0')  # NOQA -- disable pep8 E402 warning
 from gi.repository import Gtk, Gdk, GObject
 
 from config import Config
@@ -86,9 +86,11 @@ def upload_worker():
     if config.data["autocopy"]:
         copy_url()
 
+
 def upload_image(button):
     thread = Thread(target=upload_worker)
     thread.start()
+
 
 def copy_url(button):
     status = builder.get_object("status_label")
@@ -96,14 +98,17 @@ def copy_url(button):
     clipboard.set_text(status.get_text(), -1)
     clipboard.store()
 
+
 def copy_image(button):
     clipboard = Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)
     clipboard.set_image(image.pixbuf)
     clipboard.store()
 
+
 def open_browser(button):
     url = ImgurPrivateUploader.tokenUrl(privateauth.data["client_id"])
     webbrowser.open(url)
+
 
 def open_save_to_disk(button):
     dialog = builder.get_object("filechooser_dialog")
@@ -116,6 +121,7 @@ def open_save_to_disk(button):
         filename = os.path.basename(dialog.get_filename())
         image.digest(directory, filename)
     dialog.hide()
+
 
 def open_preferences(button):
     dialog = builder.get_object("preferences_dialog")
@@ -143,7 +149,6 @@ def open_preferences(button):
     autoupload_check = builder.get_object("autoupload_check")
     autoupload_check.set_active(config.data["autoupload"])
 
-
     dialog.show_all()
     response = dialog.run()
     if response == 1:
@@ -163,7 +168,7 @@ def open_preferences(button):
     dialog.hide()
 
 
-argument = sys.argv[1] if len(sys.argv)>1 else ""
+argument = sys.argv[1] if len(sys.argv) > 1 else ""
 privateauth_filename = "config/privateauth.json"
 publicauth_filename = "config/publicauth.json"
 config_filename = "config/config.json"
@@ -179,10 +184,10 @@ builder = Gtk.Builder()
 builder.add_from_file(glade_filename)
 
 # Take a screenshot
-image = Screen(active=(argument=="--active")).eat()
+image = Screen(active=(argument == "--active")).eat()
 
 # Select snapshot mode
-if argument=="--cropped":
+if argument == "--cropped":
     # Create a window to crop snaphost
     win = CropWindow(image)
     win.show_all()
@@ -215,13 +220,13 @@ main_window.show_all()
 
 # Connect signals to widgets
 handler = {
-           "on_window_main_destroy" : Gtk.main_quit,
-           "on_upload_clicked" : upload_image,
-           "on_copy_url_clicked" : copy_url,
-           "on_copy_to_clipboard_clicked" : copy_image,
-           "on_private_open_browser_clicked" : open_browser,
-           "on_save_to_disk_clicked" : open_save_to_disk,
-           "on_preferences_clicked" : open_preferences
+           "on_window_main_destroy": Gtk.main_quit,
+           "on_upload_clicked": upload_image,
+           "on_copy_url_clicked": copy_url,
+           "on_copy_to_clipboard_clicked": copy_image,
+           "on_private_open_browser_clicked": open_browser,
+           "on_save_to_disk_clicked": open_save_to_disk,
+           "on_preferences_clicked": open_preferences
         }
 builder.connect_signals(handler)
 

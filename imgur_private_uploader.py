@@ -69,4 +69,3 @@ class ImgurPrivateUploader(Uploader):
             self.auth.save()
 
         return url
-

@@ -4,19 +4,10 @@ Screenshots made delicious and easy.
 
 ## What is it? ##
 
-ScreenEat is a free and simple tool to make sharing desktop screenshots sure easy. It provides a shareable *url* after uploading the screenshot to the web.
+ScreenEat is a free and simple tool that makes sharing desktop snapshots easy and simple. It provides a way to capture screenshots of any part of your desktop, allows you to instantly upload it to your account and gives your a shareable *url* that links to the uploaded image.
 
-## Why use it? ##
+The old way of first capturing screenshot, then saving it, then uploading it and finally sharing the link is too long and cumbersome. Instead ScreenEat provides a one-step solution making sharing job faster and teamworks efficient.
 
-Reason is simple : *no local storage - immediate sharing*
-
-Forget the old time-taking process of:
-
-1. Pressing `PrintScr`.
-2. Saving the screenshot to a local file.
-3. Uploading the file so that you may share it.
-
-Instead, the process simplifies into **pressing a key**.
 
 ## Ok! I want to use it, but how? ##
 
@@ -40,6 +31,8 @@ ScreenEat allows you to take screenshot of the whole screen, active window and t
 # Cropped window screenshot:
 ./screeneat.py --cropped
 ```
+
+You may want to bind keyboard shortcuts to these commands, the process of which depends on the system you are using.
 
 ### ScreenEat with Imgur ###
 
@@ -67,13 +60,10 @@ Anonymous user without user authorization   | Upload public snapshots anonymousl
 
 ---
 
-## Related Links ##
-
-Find more about this project at:
-
-- [http://code-momo.herokuapp.com/blog/post/screeneat-delicious-screenshots](http://code-momo.herokuapp.com/blog/post/screeneat-delicious-screenshots/)
-- [http://codingparadox.herokuapp.com/blog/detail/screeneat-delicious-screenshots](http://codingparadox.herokuapp.com/blog/detail/screeneat-delicious-screenshots)
 
 ## Contributing to this project ##
+
 ScreenEat is open-source and you can contribute too if you like.  
 If want to **contribute**, make sure you first read [CONTRIBUTING.md](https://github.com/NISH1001/ScreenEat/blob/master/CONTRIBUTING.md)
+
+If you are a developer, find a bug and has fixes for the problem, you may send us a pull request any time.

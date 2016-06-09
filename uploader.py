@@ -17,21 +17,23 @@ class Uploader(metaclass=ABCMeta):
         pass
 
     def payload(self, filename):
-        return {'image' : base64.b64encode(open(filename, 'rb').read()),
-                'name' : filename,
-                'type':'base64',
-                'title':'ScreenEat Upload'}
+        return {'image': base64.b64encode(open(filename, 'rb').read()),
+                'name': filename,
+                'type': 'base64',
+                'title': 'ScreenEat Upload'}
 
     def request(self, url, payload, headers=None):
         try:
             # make the upload, ensuring that the data, headers are included
             if headers:
-                r = requests.post(url, data=payload, headers=headers, verify=True)
+                r = requests.post(url, data=payload, headers=headers,
+                                  verify=True)
             else:
                 r = requests.post(url, data=payload, verify=True)
         except Exception:
-            #TODO: better expcetion handling
+            # TODO: better exception handling
             raise ManualError("Error in connection.")
+
         # save the json response
         rj = r.json()
         # check for success
