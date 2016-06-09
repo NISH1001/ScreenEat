@@ -37,6 +37,7 @@
     <property name="window_position">center</property>
     <property name="gravity">center</property>
     <signal name="destroy" handler="on_window_main_destroy" swapped="no"/>
+    <signal name="key-press-event" handler="on_key_press" swapped="no"/>
     <child>
       <object class="GtkBox">
         <property name="visible">True</property>

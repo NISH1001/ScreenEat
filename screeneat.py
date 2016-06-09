@@ -4,8 +4,11 @@ import os
 import sys
 import platform
 import webbrowser
+import signal
+
 from threading import Thread
 from time import sleep
+
 import gi
 gi.require_version('Gtk', '3.0')  # NOQA -- disable pep8 E402 warning
 from gi.repository import Gtk, Gdk, GObject
@@ -73,7 +76,7 @@ def upload_worker():
 
     Gdk.threads_enter()
     # set status as url
-    status.set_text(url)
+    status.set_markup("<a href='" + url + "'>" + url + "</a>")
     # hide Upload button
     upload_btn.hide()
     upload_btn.set_sensitive(True)
@@ -168,11 +171,35 @@ def open_preferences(button):
     dialog.hide()
 
 
+def on_key_press(window, event):
+    keyval = event.keyval
+    keyname = Gdk.keyval_name(keyval)
+
+    # Handle escape to quit.
+    if keyname == "Escape":
+        Gtk.main_quit()
+
+    ctrl = event.state & Gdk.ModifierType.CONTROL_MASK
+
+    if ctrl:
+        # Handle Ctrl+S to save.
+        if keyname == "s":
+            open_save_to_disk(None)
+        # Handle Ctrl+C to copy.
+        if keyname == "c":
+            copy_image(None)
+
+
+signal.signal(signal.SIGINT, signal.SIG_DFL)
+
 argument = sys.argv[1] if len(sys.argv) > 1 else ""
-privateauth_filename = "config/privateauth.json"
-publicauth_filename = "config/publicauth.json"
-config_filename = "config/config.json"
-glade_filename = "screeneat.glade"
+
+path = os.path.dirname(os.path.realpath(__file__)) + "/"
+
+privateauth_filename = path + "config/privateauth.json"
+publicauth_filename = path + "config/publicauth.json"
+config_filename = path + "config/config.json"
+glade_filename = path + "screeneat.glade"
 
 # Load configuration files
 privateauth = Config(privateauth_filename)
@@ -217,10 +244,10 @@ if config.data["autoupload"]:
 main_window = builder.get_object("main_window")
 main_window.show_all()
 
-
 # Connect signals to widgets
 handler = {
            "on_window_main_destroy": Gtk.main_quit,
+           "on_key_press": on_key_press,
            "on_upload_clicked": upload_image,
            "on_copy_url_clicked": copy_url,
            "on_copy_to_clipboard_clicked": copy_image,
