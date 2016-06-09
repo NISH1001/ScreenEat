@@ -43,22 +43,31 @@ class CropWindow(Gtk.Window):
         self.connect("delete-event", Gtk.main_quit)
 
     def _on_draw(self, widget, context):
+        pixbuf = self.image.pixbuf
+
         # First the draw the image.
-        Gdk.cairo_set_source_pixbuf(context, self.image.pixbuf, 0, 0)
+        Gdk.cairo_set_source_pixbuf(context, pixbuf, 0, 0)
         context.paint()
+
+        # Draw a grayish layer to denote we are in "crop mode".
+        context.set_source_rgba(1, 1, 1, 0.2)
+        context.rectangle(0, 0, pixbuf.get_width(),
+                          pixbuf.get_height())
+        context.fill()
 
         # Next draw the cropping rectangle.
         if self.cropping:
-            # The fill
-            context.set_source_rgba(0.2, 0.5, 0.9, 0.3)
+            # The fill is the image itself, clear and visible.
+            Gdk.cairo_set_source_pixbuf(context, pixbuf, 0, 0)
             context.rectangle(self.rect.x, self.rect.y,
                               self.rect.width, self.rect.height)
             context.fill()
 
             # The border
-            context.set_source_rgba(0.2, 0.5, 0.9, 1)
+            context.set_source_rgba(1, 1, 1, 1)
             context.rectangle(self.rect.x, self.rect.y,
                               self.rect.width, self.rect.height)
+            context.set_line_width(0.7)
             context.stroke()
 
         return False

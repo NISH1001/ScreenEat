@@ -33,7 +33,7 @@ code for number of days and commit large independent logical changes as one comm
 # Python
 -------------
 
-Strictly follow [pep-8](https://www.python.org/dev/peps/pep-0008/)
+Strictly follow [pep-8](https://www.python.org/dev/peps/pep-0008/).
 Following are some of the imposed conventions that every pythonista are recommended to follow:
 
 ## 1. Function definitions
