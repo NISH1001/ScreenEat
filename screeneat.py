@@ -109,6 +109,7 @@ def copy_image(button):
 
 
 def open_browser(button):
+    privateauth.data["client_id"] = private_client_id.get_text()
     url = ImgurPrivateUploader.tokenUrl(privateauth.data["client_id"])
     webbrowser.open(url)
 
@@ -132,6 +133,7 @@ def open_preferences(button):
     public_client_id = builder.get_object("public_client_id_text")
     public_client_id.set_text(publicauth.data["client_id"])
 
+    global private_client_id
     private_client_id = builder.get_object("private_client_id_text")
     private_client_id.set_text(privateauth.data["client_id"])
 

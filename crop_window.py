@@ -64,7 +64,7 @@ class CropWindow(Gtk.Window):
             context.fill()
 
             # The border
-            context.set_source_rgba(1, 1, 1, 1)
+            context.set_source_rgba(0, 0, 0, 0.7)
             context.rectangle(self.rect.x, self.rect.y,
                               self.rect.width, self.rect.height)
             context.set_line_width(0.7)
