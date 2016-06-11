@@ -62,7 +62,7 @@ class ImgurPrivateUploader(Uploader):
             # After access token is successfully retrived,
             # AuthError is generally caused by expired token
             # TODO: Getting timestamp or reading json file for exact error
-            renewAccessToken()
+            self.renewAccessToken()
             # Try to upload once again
             url = Uploader.upload(self, filename)
             # Save any changes by renewAccessToken
