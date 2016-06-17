@@ -21,7 +21,7 @@ ScreenEat requires **Python3** and **PyGObject** to be installed. Get the depend
 
 Also make sure you have Gtk+ >= 3.10.
 
-ScreenEat allows you to take screenshot of the whole screen, only the active window or a part of the window using the crop tool.
+ScreenEat allows you to take screenshot of the whole screen, only the active window or a cropped part of the screen.
 
 ```bash
 # Whole screenshot

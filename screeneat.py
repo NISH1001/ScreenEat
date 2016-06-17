@@ -21,14 +21,16 @@ from imgur_public_uploader import ImgurPublicUploader
 from imgur_private_uploader import ImgurPrivateUploader
 
 
+
+
 def upload_worker():
-    filename = image.digest("/tmp")
+    filename = image.digest(config_dir, ".tmp")
     upload_btn = builder.get_object("upload_btn")
     copy_url_btn = builder.get_object("copy_url_btn")
     status = builder.get_object("status_label")
 
     Gdk.threads_enter()
-    status.set_text("Uploading")
+    status.set_text("Uploading...")
     upload_btn.set_sensitive(False)
     Gdk.threads_leave()
 
@@ -87,7 +89,9 @@ def upload_worker():
 
     # Auto copy url
     if config.data["autocopy"]:
-        copy_url()
+        Gdk.threads_enter()
+        copy_url(None)
+        Gdk.threads_leave()
 
 
 def upload_image(button):
@@ -196,12 +200,13 @@ signal.signal(signal.SIGINT, signal.SIG_DFL)
 
 argument = sys.argv[1] if len(sys.argv) > 1 else ""
 
-path = os.path.dirname(os.path.realpath(__file__)) + "/"
+config_dir = "~/.screeneat"
+source_dir = os.path.dirname(os.path.realpath(__file__))
 
-privateauth_filename = path + "config/privateauth.json"
-publicauth_filename = path + "config/publicauth.json"
-config_filename = path + "config/config.json"
-glade_filename = path + "screeneat.glade"
+glade_filename = os.path.join(source_dir, "screeneat.glade")
+privateauth_filename = os.path.join(config_dir, "privateauth.json")
+publicauth_filename = os.path.join(config_dir, "publicauth.json")
+config_filename = os.path.join(config_dir, "config.json")
 
 # Load configuration files
 privateauth = Config(privateauth_filename)
