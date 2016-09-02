@@ -21,8 +21,6 @@ from imgur_public_uploader import ImgurPublicUploader
 from imgur_private_uploader import ImgurPrivateUploader
 
 
-
-
 def upload_worker():
     filename = image.digest(config_dir, ".tmp")
     upload_btn = builder.get_object("upload_btn")
