@@ -41,7 +41,7 @@ def upload_worker():
         elif config.data["authmode"] == 0:
             uploader = ImgurPublicUploader(publicauth)
             if not uploader.isConfigured():
-                raise ManualError("Uploader not configured.")
+                raise ManualError("Imgur Public Uploader not configured.")
             # can raise AuthError
             url = uploader.upload(filename)
 
@@ -50,7 +50,7 @@ def upload_worker():
 
             uploader = ImgurPrivateUploader(privateauth)
             if not uploader.isConfigured():
-                raise ManualError("Uploader not configured.")
+                raise ManualError("Imgur Private Uploader not configured.")
 
             access_pin = privateauth.data["access_pin"]
             # If there is an access pin, then get new tokens from the pin
@@ -208,8 +208,8 @@ config_filename = os.path.join(config_dir, "config.json")
 
 # Load configuration files
 privateauth = Config(privateauth_filename)
-publicauth = Config(publicauth_filename)
-config = Config(config_filename)
+publicauth = Config(publicauth_filename, { "client_id": "9695b8de1e85072" })
+config = Config(config_filename, { "authmode": 0, "autoupload": False, "autocopy": True })
 
 # Get the Gui from glade file
 builder = Gtk.Builder()
