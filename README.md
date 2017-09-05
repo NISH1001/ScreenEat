@@ -1,65 +1,77 @@
 # ScreenEat #
 
-Screenshots made delicious and easy.
+Screenshots made delicious and easy. 
 
-## What is it? ##
+1. Take a screenshot.
+2. Upload screenshot to an online account.
+3. Get a shareable *url* of your screenshot.
 
-ScreenEat is a free and simple tool that makes sharing desktop snapshots easy and simple. It provides a way to capture screenshots of any part of your desktop, allows you to instantly upload it to your account and gives your a shareable *url* which links to the uploaded image.
+![ScreenEat Screenshot](https://cloud.githubusercontent.com/assets/4928045/18194070/c490653a-7102-11e6-86fa-23b08f63aa13.png)
 
-This removes the old cumbersome method of first capturing screenshot, then saving it, then uploading it and finally sharing the link  and instead provides a one-step solution making sharing job faster and teamworks efficient.
+Say goodbye to the old and cumbersome method of taking a screenshot,  saving it on disk, uploading it and finally sharing the link.
 
+## Usage ##
 
-## Ok! I want to use it, but how? ##
-
-Checkout the latest source code:
-
-    git clone https://github.com/NISH1001/ScreenEat.git
-
-ScreenEat requires **Python3** and **PyGObject** to be installed. Get the dependencies for debian systems using:
-
-    sudo apt-get install python3 python3-gi
-
-Also make sure you have Gtk+ >= 3.10.
-
-ScreenEat allows you to take screenshot of the whole screen, only the active window or a part of the window using the crop tool.
+ScreenEat allows you to take screenshot of the whole screen,  the active window or a cropped region of the screen.
 
 ```bash
-# Whole screenshot
+# Whole Screen
 ./screeneat.py
 
-# Active window screenshot:
+# Active Window
 ./screeneat.py --active
 
-# Crop mode screenshot:
+# Cropped Screen
 ./screeneat.py --cropped
 ```
 
 You may want to bind keyboard shortcuts to these commands, the process to do which depends on the system you are using.
 
-### ScreenEat with Imgur ###
+### For i3 window manager ###
 
-Before you can start uploading snapshots using ScreenEat, you will first need an [imgur](https://imgur.com/) account.
+Add these to your i3 config, Change *DIR* to the location of ScreenEat:
 
-1. Create an imgur account.
+    bindsym Print exec DIR/python3 screeneat.py
+    bindsym Shift+Print exec python3 DIR/screeneat.py --active
+    bindsym --release $mod+Print exec python3 DIR/screeneat.py --cropped
+
+## Ok! I want to it, but how? ##
+
+Checkout the latest sources with:
+
+    git clone https://github.com/NISH1001/ScreenEat.git
+
+ScreenEat requires **Python3** and **PyGObject** to be installed. Also make sure you have Gtk+ version >= 3.10.
+
+    # Get dependencies for debian
+    sudo apt-get install python3 python3-gi
+
+## ScreenEat with Imgur ##
+
+Before you can start uploading screenshots using ScreenEat, you will first need an *imgur* account. You can still take screenshots and save it locally on your disk.
+
+1. Create an [imgur](https://imgur.com/) account.
 2. Register an application from https://api.imgur.com/oauth2/addclient.
+3. Go to *Preferences* and enter the authorization details.
 
-Enter the following details for registration.
+### Fields required for application registration ###
 
 Field                       | Detail
 --------------------------- | ------------------
 Application name            | ScreenEat
 Authorization callback URL  | *Blank*
 Website                     | *Optional*
-Email                       | your email address
+Email                       | Your email address
 Description                 | *Optional*
+Authorization type          | ...
 
-Choose the Authorization type that best suits your application.
+You can choose the *Authorization type* that best suits you.
 
-Authorization type                          | Detail
+Authorization type                          | What does it mean for you?
 ------------------------------------------- | ------------------------------------
 OAuth2 authorization without callback       | Upload private snapshots.
 Anonymous user without user authorization   | Upload public snapshots anonymously.
-
+ 
 ---
 
 
@@ -70,3 +82,4 @@ ScreenEat is open-source and you can contribute to it if you like.
 If you are a developer and find a bug, and has fixes for the problem as well, you may send us a pull request any time.
 
 If want to **contribute**, make sure you first read [CONTRIBUTING.md](https://github.com/NISH1001/ScreenEat/blob/master/CONTRIBUTING.md).
+
