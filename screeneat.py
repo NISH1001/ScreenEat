@@ -22,7 +22,7 @@ from imgur_private_uploader import ImgurPrivateUploader
 
 
 def upload_worker():
-    filename = image.digest(config_dir, ".tmp")
+    filename = image.digest(config_dir, ".tmp", config.data["quality"])
     upload_btn = builder.get_object("upload_btn")
     copy_url_btn = builder.get_object("copy_url_btn")
     status = builder.get_object("status_label")
@@ -125,7 +125,7 @@ def open_save_to_disk(button):
     if response == 1:
         directory = os.path.dirname(dialog.get_filename())
         filename = os.path.basename(dialog.get_filename())
-        image.digest(directory, filename)
+        image.digest(directory, filename, config.data["quality"])
     dialog.hide()
 
 
@@ -156,6 +156,9 @@ def open_preferences(button):
     autoupload_check = builder.get_object("autoupload_check")
     autoupload_check.set_active(config.data["autoupload"])
 
+    image_quality = builder.get_object("image_quality_text")
+    image_quality.set_text(config.data["quality"])
+
     dialog.show_all()
     response = dialog.run()
     if response == 1:
@@ -170,6 +173,7 @@ def open_preferences(button):
         config.data["authmode"] = authmode_combo.get_active()
         config.data["autoupload"] = autoupload_check.get_active()
         config.data["autocopy"] = autocopy_check.get_active()
+        config.data["quality"] = image_quality.get_text()
         config.save()
 
     dialog.hide()
@@ -209,7 +213,7 @@ config_filename = os.path.join(config_dir, "config.json")
 # Load configuration files
 privateauth = Config(privateauth_filename)
 publicauth = Config(publicauth_filename, { "client_id": "9695b8de1e85072" })
-config = Config(config_filename, { "authmode": 0, "autoupload": False, "autocopy": True })
+config = Config(config_filename, { "authmode": 0, "autoupload": False, "autocopy": True, "quality": "98" })
 
 # Get the Gui from glade file
 builder = Gtk.Builder()

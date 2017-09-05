@@ -1,12 +1,12 @@
 # ScreenEat #
 
-Screenshots made delicious and easy. 
+Screenshots made delicious and easy.
 
 1. Take a screenshot.
 2. Upload screenshot to an online account.
 3. Get a shareable *url* of your screenshot.
 
-![ScreenEat Screenshot](https://cloud.githubusercontent.com/assets/4928045/18194070/c490653a-7102-11e6-86fa-23b08f63aa13.png)
+![ScreenEat Screenshot](https://user-images.githubusercontent.com/4928045/30070550-7ddf1f3e-9283-11e7-86f7-2fd846916474.jpeg)
 
 Say goodbye to the old and cumbersome method of taking a screenshot,  saving it on disk, uploading it and finally sharing the link.
 
@@ -16,24 +16,27 @@ ScreenEat allows you to take screenshot of the whole screen,  the active window 
 
 ```bash
 # Whole Screen
-./screeneat.py
+python3 screeneat.py
 
 # Active Window
-./screeneat.py --active
+python3 screeneat.py --active
 
 # Cropped Screen
-./screeneat.py --cropped
+python3 screeneat.py --cropped
 ```
 
 You may want to bind keyboard shortcuts to these commands, the process to do which depends on the system you are using.
 
 ### For i3 window manager ###
 
-Add these to your i3 config, Change *DIR* to the location of ScreenEat:
+Add the following to your i3 config, and set ``$screeneat`` accordingly.
 
-    bindsym Print exec DIR/python3 screeneat.py
-    bindsym Shift+Print exec python3 DIR/screeneat.py --active
-    bindsym --release $mod+Print exec python3 DIR/screeneat.py --cropped
+```
+set $screeneat ~/ScreenEat/screeneat.py
+bindsym Print exec python3 $screeneat
+bindsym Shift+Print exec python3 $screeneat --active
+bindsym --release $mod+Print exec python3 $screeneat --cropped
+```
 
 ## Ok! I want to it, but how? ##
 
@@ -59,19 +62,19 @@ Before you can start uploading screenshots using ScreenEat, you will first need 
 Field                       | Detail
 --------------------------- | ------------------
 Application name            | ScreenEat
-Authorization callback URL  | *Blank*
+Authorization type          | ...
+Authorization callback URL  | *Optional*
 Website                     | *Optional*
 Email                       | Your email address
 Description                 | *Optional*
-Authorization type          | ...
 
 You can choose the *Authorization type* that best suits you.
 
 Authorization type                          | What does it mean for you?
 ------------------------------------------- | ------------------------------------
-OAuth2 authorization without callback       | Upload private snapshots.
+OAuth2 authorization with a callback URL    | Upload private snapshots and requires an authorization callback URL.
+OAuth2 authorization without callback URL   | Upload private snapshots.
 Anonymous user without user authorization   | Upload public snapshots anonymously.
- 
 ---
 
 
