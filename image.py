@@ -20,9 +20,9 @@ class Image:
         """Generate a unique filename for the image based on timestamp."""
 
         timestamp = "_%s" % (int(time.time() * 1000))
-        return "screeneat" + timestamp + ".jpg"
+        return "screeneat" + timestamp + ".jpeg"
 
-    def digest(self, directory, filename=None):
+    def digest(self, directory, filename=None, quality=100):
         """Save image to file, with given filename and directory."""
 
         # Make path posix and windows safe, expanding the user directory.
@@ -37,13 +37,13 @@ class Image:
             filename = self.generate_filename()
 
         # Add extension if not already in the filename.
-        if filename[filename.rfind(".")+1:].lower() not in {'jpg', 'jpeg'}:
-            filename = filename + ".jpg"
+        if filename[filename.rfind(".")+1:].lower() != 'jpeg':
+            filename = filename + ".jpeg"
 
         # Join directory with the filename.
         filename = os.path.join(directory, filename)
 
-        self.pixbuf.savev(filename, "jpeg", (), ())
+        self.pixbuf.savev(filename, "jpeg", ["quality"], [quality])
 
         return filename
 

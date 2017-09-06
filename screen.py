@@ -9,16 +9,26 @@ class Screen:
 
     def __init__(self, active=False):
         # Get the window.
+        self.screen = Gdk.Screen.get_default()
+        self.root_window = self.screen.get_root_window()
+        active_window = self.screen.get_active_window()
+
+        monitor = self.screen.get_monitor_at_window(active_window)
+        self.area = self.screen.get_monitor_geometry(monitor)
+
         if active:
-            self.window = Gdk.Screen.get_default().get_active_window()
+            self.window = active_window
         else:
-            self.window = Gdk.get_default_root_window()
+            self.window = self.root_window
 
     def eat(self):
         """Capture the screenshot and return the image."""
 
-        x, y, w, h = self.window.get_geometry()
-        pixbuf = Gdk.pixbuf_get_from_window(self.window, x, y, w, h)
+        _, clip_area = self.window.get_frame_extents().intersect(self.area)
+        pixbuf = Gdk.pixbuf_get_from_window(self.root_window,
+                                            clip_area.x, clip_area.y,
+                                            clip_area.width,
+                                            clip_area.height)
 
         # Return Image object with captured screenshot.
         return Image(pixbuf)
