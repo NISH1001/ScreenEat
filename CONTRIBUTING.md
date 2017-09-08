@@ -53,6 +53,7 @@ Following are some of the imposed conventions that every pythonista are recommen
 - **Public** variables should be in lower case seperated by underscore
 - `self.my_list`
 - **Private** variables should begin with a **single** underscore
+- Also, no need of setters and getters. Cheers.
 
 ## 4. Constants
 - Use **FULLY_CAPITALIZED** name for constants
