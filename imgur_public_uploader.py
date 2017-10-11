@@ -1,4 +1,3 @@
-from config import Config
 from uploader import Uploader
 
 

@@ -1,8 +1,5 @@
-import webbrowser
-import pprint
-from uploader import Uploader
-from config import Config
 from exception import AuthError
+from uploader import Uploader
 
 
 class ImgurPrivateUploader(Uploader):

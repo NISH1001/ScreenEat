@@ -8,10 +8,12 @@ from exception import AuthError, ManualError
 class Uploader(metaclass=ABCMeta):
     """An uploader class."""
 
+    # Uploader specific target url
     @abstractmethod
     def url(self):
         pass
 
+    # Uploader specific header
     @abstractmethod
     def headers(self):
         pass
@@ -22,6 +24,7 @@ class Uploader(metaclass=ABCMeta):
                 'type': 'base64',
                 'title': 'ScreenEat Upload'}
 
+    # Post request with payload and headers
     def request(self, url, payload, headers=None):
         try:
             # make the upload, ensuring that the data, headers are included

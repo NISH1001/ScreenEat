@@ -3,7 +3,6 @@
 import unittest
 from screen import Screen
 from config import Config
-from imgur_public_uploader import ImgurPublicUploader
 from crop_window import CropWindow
 
 import gi

@@ -1,7 +1,5 @@
 import os
-import sys
 import time
-
 import gi
 gi.require_version('Gtk', '3.0')  # NOQA -- disable pep8 E402 warning
 from gi.repository import GdkPixbuf
@@ -53,6 +51,8 @@ class Image:
         cropped_pb = self.pixbuf.new_subpixbuf(x, y, width, height)
         self.pixbuf = cropped_pb
 
+        return self
+
     def scale(self, size=500):
         """Crop the image to certain size preserving aspect ratio."""
 
@@ -65,3 +65,5 @@ class Image:
             scaled_pb = self.pixbuf.scale_simple(size, size*ratio,
                                                  GdkPixbuf.InterpType.BILINEAR)
         self.pixbuf = scaled_pb
+
+        return self
