@@ -1,3 +1,5 @@
+#!/usr/bin/python3.6
+
 import argparse
 import os
 import platform
@@ -13,8 +15,8 @@ from screeneat.windows.main_window import MainWindow
 
 
 def parse():
-    HOME = os.expanduser("~")
-    config_path = os.join(HOME, '.screeneat.conf')
+    HOME = os.path.expanduser("~")
+    config_path = os.path.join(HOME, '.screeneat.conf')
 
     parser = argparse.ArgumentParser(
         "screeneat",
@@ -61,9 +63,9 @@ def main():
         Gdk.threads_init()
 
     # Load configurations
-    privateauth_filename = os.join(args.config_path, "privateauth.json")
-    publicauth_filename = os.join(args.config_path, "publicauth.json")
-    config_filename = os.join(args.config_path, "config.json")
+    privateauth_filename = os.path.join(args.config_path, "privateauth.json")
+    publicauth_filename = os.path.join(args.config_path, "publicauth.json")
+    config_filename = os.path.join(args.config_path, "config.json")
 
     # Load all configuration files
     privateauth_config = Config(privateauth_filename)
