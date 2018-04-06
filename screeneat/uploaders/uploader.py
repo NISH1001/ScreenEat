@@ -2,7 +2,8 @@ import requests
 import base64
 from abc import ABCMeta
 from abc import abstractmethod
-from exception import AuthError, ManualError
+
+from screeneat.exception import AuthError, ManualError
 
 
 class Uploader(metaclass=ABCMeta):

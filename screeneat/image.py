@@ -20,7 +20,7 @@ class Image:
         timestamp = "_%s" % (int(time.time() * 1000))
         return "screeneat" + timestamp + ".jpeg"
 
-    def digest(self, directory, filename=None, quality=100):
+    def digest(self, directory, filename=None, quality="90"):
         """Save image to file, with given filename and directory."""
 
         # Make path posix and windows safe, expanding the user directory.
