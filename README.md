@@ -32,10 +32,18 @@ You may want to bind keyboard shortcuts to these commands, the process to do whi
 Add the following to your i3 config, and set ``$screeneat`` accordingly.
 
 ```
+# Set location of application
 set $screeneat ~/ScreenEat/screeneat.py
+
+# Bindings to take screenshot
 bindsym Print exec python3 $screeneat
 bindsym Shift+Print exec python3 $screeneat --active
 bindsym --release $mod+Print exec python3 $screeneat --cropped
+
+# Bindings with to take screenshot after 2 seconds
+bindsym Ctrl+Print exec sleep 2 && python3 $screeneat
+bindsym Ctrl+Shift+Print exec sleep 2 && python3 $screeneat --active
+bindsym --release Ctrl+$mod+Print exec sleep 2 && python3 $screeneat --cropped
 ```
 
 ## Ok! I want to it, but how? ##
