@@ -83,6 +83,12 @@ class MainWindow:
         main_window = self.builder.get_object("main_window")
         main_window.show_all()
 
+        # Auto copy image to clipboard
+        if self.config.data["autoimagecopy"]:
+            Gdk.threads_enter()
+            self.copy_image(None)
+            Gdk.threads_leave()
+
         # Auto upload file
         if self.config.data["autoupload"]:
             self.upload_image(None)
@@ -230,6 +236,9 @@ class MainWindow:
         autocopy_check = self.builder.get_object("autocopy_check")
         autocopy_check.set_active(self.config.data["autocopy"])
 
+        autoimagecopy_check = self.builder.get_object("autoimagecopy_check")
+        autoimagecopy_check.set_active(self.config.data["autoimagecopy"])
+
         autoupload_check = self.builder.get_object("autoupload_check")
         autoupload_check.set_active(self.config.data["autoupload"])
 
@@ -252,6 +261,9 @@ class MainWindow:
             self.config.data["authmode"] = authmode_combo.get_active()
             self.config.data["autoupload"] = autoupload_check.get_active()
             self.config.data["autocopy"] = autocopy_check.get_active()
+            self.config.data["autoimagecopy"] = (
+                autoimagecopy_check.get_active()
+            )
             self.config.data["quality"] = image_quality.get_text()
             self.config.save()
 
