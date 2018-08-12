@@ -12,5 +12,5 @@ setup(
     package_data={
         '': ['*.glade']
     },
-    scripts=['screeneat']
+    scripts=['screen-eat']
 )

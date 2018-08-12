@@ -5,9 +5,8 @@ import gi
 gi.require_version('Gtk', '3.0')  # NOQA -- disable pep8 E402 warning
 from gi.repository import Gtk
 
-import pathmagic
-from screeneat.windows.screen import Screen
-from screeneat.windows.crop_window import CropWindow
+from screen_eat.windows.screen import Screen
+from screen_eat.windows.crop_window import CropWindow
 
 
 # NOTE: this tests are broken

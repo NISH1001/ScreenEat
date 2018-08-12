@@ -1,5 +1,5 @@
-from screeneat.exception import AuthError
-from screeneat.uploaders.uploader import Uploader
+from screen_eat.exception import AuthError
+from screen_eat.uploaders.uploader import Uploader
 
 
 class ImgurPrivateUploader(Uploader):

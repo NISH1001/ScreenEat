@@ -18,7 +18,7 @@ class Image:
         """Generate a unique filename for the image based on timestamp."""
 
         timestamp = "_%s" % (int(time.time() * 1000))
-        return "screeneat" + timestamp + ".jpeg"
+        return "screen-eat" + timestamp + ".jpeg"
 
     def digest(self, directory, filename=None, quality="90"):
         """Save image to file, with given filename and directory."""

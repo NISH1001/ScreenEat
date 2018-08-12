@@ -3,7 +3,7 @@ import base64
 from abc import ABCMeta
 from abc import abstractmethod
 
-from screeneat.exception import AuthError, ManualError
+from screen_eat.exception import AuthError, ManualError
 
 
 class Uploader(metaclass=ABCMeta):

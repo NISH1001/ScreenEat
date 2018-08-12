@@ -1,14 +1,13 @@
 import unittest
-import pathmagic
 
-from screeneat.config import Config
+from screen_eat.config import Config
 
 
 class ConfigTester(unittest.TestCase):
 
-    configfile = "/tmp/screeneat.config.json"
-    secret_key = "screeneat.secret.key"
-    secret_id = "screeneat.secret.id"
+    configfile = "/tmp/screen-eat.config.json"
+    secret_key = "screen-eat.secret.key"
+    secret_id = "screen-eat.secret.id"
 
     def create_config(self):
         # Create a new config
