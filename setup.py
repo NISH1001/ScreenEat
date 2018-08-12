@@ -7,7 +7,10 @@ setup(
     version='1.0',
     description='Screen Capturing Made Delicious',
     author='Nishan Pantha, Bibek Dahal, Safar Ligal, Bibek Pandey',
-    author_email='bewakepandey@gmail.com',
-    packages=['screeneat', 'screeneat.windows', 'screeneat.uploaders'],
-    scripts=['screen-eat']
+    author_email='nishanpantha@gmail.com, bibek.dahal@togglecorp.com, weathermist@gmail.com, bewakepandey@gmail.com',  # noqa
+    packages=['screen_eat', 'screen_eat.windows', 'screen_eat.uploaders'],
+    package_data={
+        '': ['*.glade']
+    },
+    scripts=['screeneat']
 )

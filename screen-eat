@@ -10,16 +10,16 @@ gi.require_version('Gtk', '3.0')  # NOQA -- disable pep8 E402 warning
 gi.require_version('Gdk', '3.0')  # NOQA -- disable pep8 E402 warning
 from gi.repository import Gdk, GObject
 
-from screeneat.config import Config
-from screeneat.windows.main_window import MainWindow
+from screen_eat.config import Config
+from screen_eat.windows.main_window import MainWindow
 
 
 def parse():
     HOME = os.path.expanduser("~")
-    config_path = os.path.join(HOME, '.screeneat.conf')
+    config_path = os.path.join(HOME, '.screen-eat.conf')
 
     parser = argparse.ArgumentParser(
-        "screeneat",
+        "screen-eat",
         description="screenshot made delicious "
     )
 
@@ -73,7 +73,7 @@ def main():
         publicauth_filename,
         {"client_id": "9695b8de1e85072"}
     )
-    screeneat_config = Config(
+    screen_eat_config = Config(
         config_filename,
         {
             "authmode": 0,
@@ -89,7 +89,7 @@ def main():
         args.eat_active_screen,
         args.eat_cropped_screen,
         temp_dir,
-        screeneat_config,
+        screen_eat_config,
         privateauth_config,
         publicauth_config,
     )
