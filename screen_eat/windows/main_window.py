@@ -6,11 +6,11 @@ import webbrowser
 from threading import Thread
 from gi.repository import Gtk, Gdk
 
-from screeneat.exception import ManualError, Error
-from screeneat.uploaders.imgur_private_uploader import ImgurPrivateUploader
-from screeneat.uploaders.imgur_public_uploader import ImgurPublicUploader
-from screeneat.windows.screen import Screen
-from screeneat.windows.crop_window import CropWindow
+from screen_eat.exception import ManualError, Error
+from screen_eat.uploaders.imgur_private_uploader import ImgurPrivateUploader
+from screen_eat.uploaders.imgur_public_uploader import ImgurPublicUploader
+from screen_eat.windows.screen import Screen
+from screen_eat.windows.crop_window import CropWindow
 
 
 class MainWindow:
@@ -102,7 +102,7 @@ class MainWindow:
         # Save image and get filename
         filename = self.image.digest(
             self.temp_dir,
-            "screeneat",
+            "screen-eat",
             self.config.data["quality"])
 
         # Get UI elements

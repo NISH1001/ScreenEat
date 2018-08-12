@@ -1,4 +1,4 @@
-from screeneat.uploaders.uploader import Uploader
+from screen_eat.uploaders.uploader import Uploader
 
 
 class ImgurPublicUploader(Uploader):

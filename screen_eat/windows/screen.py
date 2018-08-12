@@ -1,7 +1,7 @@
 import gi
 gi.require_version('Gdk', '3.0')  # NOQA -- disable pep8 E402 warning
 from gi.repository import Gdk
-from screeneat.image import Image
+from screen_eat.image import Image
 
 
 class Screen:

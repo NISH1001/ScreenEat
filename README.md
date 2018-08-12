@@ -16,35 +16,16 @@ ScreenEat allows you to take screenshot of the whole screen,  the active window 
 
 ```bash
 # Whole Screen
-python3 screeneat.py
+screen-eat
 
 # Active Window
-python3 screeneat.py --active
+screen-eat --active
 
 # Cropped Screen
-python3 screeneat.py --cropped
+screen-eat --cropped
 ```
 
 You may want to bind keyboard shortcuts to these commands, the process to do which depends on the system you are using.
-
-### For i3 window manager ###
-
-Add the following to your i3 config, and set ``$screeneat`` accordingly.
-
-```
-# Set location of application
-set $screeneat ~/ScreenEat/screeneat.py
-
-# Bindings to take screenshot
-bindsym Print exec python3 $screeneat
-bindsym Shift+Print exec python3 $screeneat --active
-bindsym --release $mod+Print exec python3 $screeneat --cropped
-
-# Bindings with to take screenshot after 2 seconds
-bindsym Ctrl+Print exec sleep 2 && python3 $screeneat
-bindsym Ctrl+Shift+Print exec sleep 2 && python3 $screeneat --active
-bindsym --release Ctrl+$mod+Print exec sleep 2 && python3 $screeneat --cropped
-```
 
 ## Ok! I want to it, but how? ##
 
@@ -56,6 +37,28 @@ ScreenEat requires **Python3** and **PyGObject** to be installed. Also make sure
 
     # Get dependencies for debian
     sudo apt-get install python3 python3-gi
+
+## Installation with pip ##
+
+It's as easy as 
+
+    pip3 install screen-eat
+
+## For i3 window manager ##
+
+Add the following to your i3 config:
+
+```
+# Bindings to take screenshot
+bindsym Print exec screen-eat
+bindsym Shift+Print exec screen-eat --active
+bindsym --release $mod+Print exec screen-eat --cropped
+
+# Bindings with to take screenshot after 2 seconds
+bindsym Ctrl+Print exec sleep 2 && screen-eat
+bindsym Ctrl+Shift+Print exec sleep 2 && screen-eat --active
+bindsym --release Ctrl+$mod+Print exec sleep 2 && screen-eat --cropped
+```
 
 ## ScreenEat with Imgur ##
 
