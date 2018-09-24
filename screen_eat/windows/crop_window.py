@@ -39,8 +39,15 @@ class CropWindow(Gtk.Window):
         self.drawing_area.connect("button-press-event", self._on_mouse_down)
         self.drawing_area.connect("motion_notify_event", self._on_mouse_move)
         self.drawing_area.connect("button-release-event", self._on_mouse_up)
+        self.connect("realize", self._on_realize)
         self.connect("key-press-event", self._on_key_press)
         self.connect("delete-event", Gtk.main_quit)
+
+    def _on_realize(self, widget):
+        self.get_window().set_cursor(Gdk.Cursor.new_from_name(
+            self.get_display(),
+            "crosshair",
+        ))
 
     def _on_draw(self, widget, context):
         pixbuf = self.image.pixbuf
