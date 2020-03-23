@@ -1,6 +1,7 @@
 import gi
-gi.require_version('Gtk', '3.0')  # NOQA -- disable pep8 E402 warning
-gi.require_version('Gdk', '3.0')  # NOQA -- disable pep8 E402 warning
+
+gi.require_version("Gtk", "3.0")  # NOQA -- disable pep8 E402 warning
+gi.require_version("Gdk", "3.0")  # NOQA -- disable pep8 E402 warning
 from gi.repository import Gtk
 from gi.repository import Gdk
 
@@ -31,10 +32,12 @@ class CropWindow(Gtk.Window):
         self.cropping = False
 
         # Attach mouse and keyboard events.
-        self.drawing_area.set_events(Gdk.EventMask.EXPOSURE_MASK |
-                                     Gdk.EventMask.BUTTON_PRESS_MASK |
-                                     Gdk.EventMask.BUTTON_RELEASE_MASK |
-                                     Gdk.EventMask.POINTER_MOTION_MASK)
+        self.drawing_area.set_events(
+            Gdk.EventMask.EXPOSURE_MASK
+            | Gdk.EventMask.BUTTON_PRESS_MASK
+            | Gdk.EventMask.BUTTON_RELEASE_MASK
+            | Gdk.EventMask.POINTER_MOTION_MASK
+        )
 
         self.drawing_area.connect("button-press-event", self._on_mouse_down)
         self.drawing_area.connect("motion_notify_event", self._on_mouse_move)
@@ -44,10 +47,9 @@ class CropWindow(Gtk.Window):
         self.connect("delete-event", Gtk.main_quit)
 
     def _on_realize(self, widget):
-        self.get_window().set_cursor(Gdk.Cursor.new_from_name(
-            self.get_display(),
-            "crosshair",
-        ))
+        self.get_window().set_cursor(
+            Gdk.Cursor.new_from_name(self.get_display(), "crosshair",)
+        )
 
     def _on_draw(self, widget, context):
         pixbuf = self.image.pixbuf
@@ -58,22 +60,23 @@ class CropWindow(Gtk.Window):
 
         # Draw a grayish layer to denote we are in "crop mode".
         context.set_source_rgba(0, 0, 0, 0.5)
-        context.rectangle(0, 0, pixbuf.get_width(),
-                          pixbuf.get_height())
+        context.rectangle(0, 0, pixbuf.get_width(), pixbuf.get_height())
         context.fill()
 
         # Next draw the cropping rectangle.
         if self.cropping:
             # The fill is the image itself, clear and visible.
             Gdk.cairo_set_source_pixbuf(context, pixbuf, 0, 0)
-            context.rectangle(self.rect.x, self.rect.y,
-                              self.rect.width, self.rect.height)
+            context.rectangle(
+                self.rect.x, self.rect.y, self.rect.width, self.rect.height
+            )
             context.fill()
 
             # The border
             context.set_source_rgba(0, 0, 0, 0.7)
-            context.rectangle(self.rect.x, self.rect.y,
-                              self.rect.width, self.rect.height)
+            context.rectangle(
+                self.rect.x, self.rect.y, self.rect.width, self.rect.height
+            )
             context.set_line_width(0.7)
             context.stroke()
 

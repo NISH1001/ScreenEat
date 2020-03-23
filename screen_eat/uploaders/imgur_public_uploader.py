@@ -11,8 +11,7 @@ class ImgurPublicUploader(Uploader):
         return "https://api.imgur.com/3/image"
 
     def headers(self):
-        return {"Authorization":
-                "Client-ID {0}".format(self.auth.data["client_id"])}
+        return {"Authorization": "Client-ID {0}".format(self.auth.data["client_id"])}
 
     def isConfigured(self):
         return self.auth.data["client_id"] != ""

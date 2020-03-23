@@ -14,8 +14,15 @@ from screen_eat.windows.crop_window import CropWindow
 
 
 class MainWindow:
-    def __init__(self, eat_active_screen, eat_cropped_screen,
-                 temp_directory, config, privateauth, publicauth):
+    def __init__(
+        self,
+        eat_active_screen,
+        eat_cropped_screen,
+        temp_directory,
+        config,
+        privateauth,
+        publicauth,
+    ):
 
         # Configurations
         self.config = config
@@ -47,8 +54,7 @@ class MainWindow:
 
             # Crop the image
             crop_rect = crop_win.rect
-            self.image.crop(crop_rect.x, crop_rect.y,
-                            crop_rect.width, crop_rect.height)
+            self.image.crop(crop_rect.x, crop_rect.y, crop_rect.width, crop_rect.height)
 
         # Create preview image
         self.preview_image = self.image.copy().scale(500)
@@ -62,17 +68,15 @@ class MainWindow:
 
         # Connect signals to widgets
         handler = {
-                   "on_window_main_destroy": Gtk.main_quit,
-                   "on_key_press": self.on_key_press,
-
-                   "on_upload_clicked": self.upload_image,
-                   "on_copy_url_clicked": self.copy_url,
-                   "on_copy_to_clipboard_clicked": self.copy_image,
-
-                   "on_private_open_browser_clicked": self.open_browser,
-                   "on_save_to_disk_clicked": self.open_save_to_disk,
-                   "on_preferences_clicked": self.open_preferences
-                }
+            "on_window_main_destroy": Gtk.main_quit,
+            "on_key_press": self.on_key_press,
+            "on_upload_clicked": self.upload_image,
+            "on_copy_url_clicked": self.copy_url,
+            "on_copy_to_clipboard_clicked": self.copy_image,
+            "on_private_open_browser_clicked": self.open_browser,
+            "on_save_to_disk_clicked": self.open_save_to_disk,
+            "on_preferences_clicked": self.open_preferences,
+        }
         self.builder.connect_signals(handler)
 
         # Load preview image in UI
@@ -101,9 +105,8 @@ class MainWindow:
     def upload_worker(self):
         # Save image and get filename
         filename = self.image.digest(
-            self.temp_dir,
-            "screen-eat",
-            self.config.data["quality"])
+            self.temp_dir, "screen-eat", self.config.data["quality"]
+        )
 
         # Get UI elements
         upload_btn = self.builder.get_object("upload_btn")
@@ -221,8 +224,7 @@ class MainWindow:
         private_client_id = self.builder.get_object("private_client_id_text")
         private_client_id.set_text(self.privateauth.data["client_id"])
 
-        private_client_secret = self.builder.get_object(
-                "private_client_secret_text")
+        private_client_secret = self.builder.get_object("private_client_secret_text")
         private_client_secret.set_text(self.privateauth.data["client_secret"])
 
         private_access_pin = self.builder.get_object("private_access_pin_text")
@@ -252,18 +254,14 @@ class MainWindow:
             self.publicauth.save()
 
             self.privateauth.data["client_id"] = private_client_id.get_text()
-            self.privateauth.data["client_secret"] = (
-                private_client_secret.get_text()
-            )
+            self.privateauth.data["client_secret"] = private_client_secret.get_text()
             self.privateauth.data["access_pin"] = private_access_pin.get_text()
             self.privateauth.save()
 
             self.config.data["authmode"] = authmode_combo.get_active()
             self.config.data["autoupload"] = autoupload_check.get_active()
             self.config.data["autocopy"] = autocopy_check.get_active()
-            self.config.data["autoimagecopy"] = (
-                autoimagecopy_check.get_active()
-            )
+            self.config.data["autoimagecopy"] = autoimagecopy_check.get_active()
             self.config.data["quality"] = image_quality.get_text()
             self.config.save()
 

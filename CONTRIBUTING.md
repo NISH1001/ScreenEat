@@ -58,3 +58,9 @@ Following are some of the imposed conventions that every pythonista are recommen
 ## 4. Constants
 - Use **FULLY_CAPITALIZED** name for constants
 - In case of multiple words, separate them by underscore
+
+
+---
+
+## Formatting
+Please use [black](https://github.com/psf/black) to re-format the code.

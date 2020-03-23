@@ -1,7 +1,8 @@
 import os
 import time
 import gi
-gi.require_version('Gtk', '3.0')  # NOQA -- disable pep8 E402 warning
+
+gi.require_version("Gtk", "3.0")  # NOQA -- disable pep8 E402 warning
 from gi.repository import GdkPixbuf
 
 
@@ -35,7 +36,7 @@ class Image:
             filename = self.generate_filename()
 
         # Add extension if not already in the filename.
-        if filename[filename.rfind(".")+1:].lower() != 'jpeg':
+        if filename[filename.rfind(".") + 1 :].lower() != "jpeg":
             filename = filename + ".jpeg"
 
         # Join directory with the filename.
@@ -56,14 +57,16 @@ class Image:
     def scale(self, size=500):
         """Crop the image to certain size preserving aspect ratio."""
 
-        ratio = self.pixbuf.get_height()/self.pixbuf.get_width()
+        ratio = self.pixbuf.get_height() / self.pixbuf.get_width()
 
         if ratio > 1:
-            scaled_pb = self.pixbuf.scale_simple(size/ratio, size,
-                                                 GdkPixbuf.InterpType.BILINEAR)
+            scaled_pb = self.pixbuf.scale_simple(
+                size / ratio, size, GdkPixbuf.InterpType.BILINEAR
+            )
         else:
-            scaled_pb = self.pixbuf.scale_simple(size, size*ratio,
-                                                 GdkPixbuf.InterpType.BILINEAR)
+            scaled_pb = self.pixbuf.scale_simple(
+                size, size * ratio, GdkPixbuf.InterpType.BILINEAR
+            )
         self.pixbuf = scaled_pb
 
         return self
