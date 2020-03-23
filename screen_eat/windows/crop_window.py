@@ -57,7 +57,7 @@ class CropWindow(Gtk.Window):
         context.paint()
 
         # Draw a grayish layer to denote we are in "crop mode".
-        context.set_source_rgba(1, 1, 1, 0.2)
+        context.set_source_rgba(0, 0, 0, 0.5)
         context.rectangle(0, 0, pixbuf.get_width(),
                           pixbuf.get_height())
         context.fill()

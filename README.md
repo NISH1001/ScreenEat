@@ -31,18 +31,35 @@ You may want to bind keyboard shortcuts to these commands, the process to do whi
 
 Checkout the latest sources with:
 
-    git clone https://github.com/NISH1001/ScreenEat.git
+```bash
+git clone https://github.com/NISH1001/ScreenEat.git
+```
 
 ScreenEat requires **Python3** and **PyGObject** to be installed. Also make sure you have Gtk+ version >= 3.10.
 
-    # Get dependencies for debian
-    sudo apt-get install python3 python3-gi
+```bash
+# Get dependencies for debian
+apt install python3 python3-gi
+
+# Get dependencies for archlinux
+pacman -S python-gobject python-cairo
+```
+
+## Installation with setup.py
 
 ## Installation with pip ##
 
-It's as easy as 
+It's as easy as
 
-    pip3 install screen-eat
+```bash
+pip3 install screen-eat
+```
+
+If you cannot find the package in pip, you can use setup.py
+
+```bash
+python setup.py install --user
+```
 
 ## For i3 window manager ##
 
