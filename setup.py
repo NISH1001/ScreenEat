@@ -4,7 +4,7 @@ from distutils.core import setup
 
 setup(
     name="ScreenEat",
-    version="1.1",
+    version="1.3",
     description="Screen Capturing Made Delicious",
     long_description="Seamlessly take screenshots by directly uploading to imgur and get a shareable link",
     url="https://github.com/NISH1001/ScreenEat",
