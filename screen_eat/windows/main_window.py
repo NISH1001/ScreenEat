@@ -12,6 +12,11 @@ from screen_eat.uploaders.imgur_public_uploader import ImgurPublicUploader
 from screen_eat.windows.screen import Screen
 from screen_eat.windows.crop_window import CropWindow
 
+try:
+    from screen_eat import ocr
+except ImportError:
+    pass
+
 
 class MainWindow:
     def __init__(
@@ -60,6 +65,7 @@ class MainWindow:
         self.preview_image = self.image.copy().scale(500)
 
         self.url = ""
+        self.ocr_text = ""
 
     def load(self):
         # Get the Gui from glade file
@@ -76,6 +82,7 @@ class MainWindow:
             "on_private_open_browser_clicked": self.open_browser,
             "on_save_to_disk_clicked": self.open_save_to_disk,
             "on_preferences_clicked": self.open_preferences,
+            "on_ocr_clicked": self.copy_ocr,
         }
         self.builder.connect_signals(handler)
 
@@ -187,6 +194,17 @@ class MainWindow:
     def copy_url(self, button):
         clipboard = Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)
         clipboard.set_text(self.url, -1)
+        clipboard.store()
+
+    def copy_ocr(self, button):
+        """
+            If everything goes fine, pytesseract will be able to extract text.
+            Else, empty text is stored
+        """
+        clipboard = Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)
+        if not self.ocr_text:
+            self.ocr_text = ocr.image_to_text(self.image.as_rgb)
+        clipboard.set_text(self.ocr_text, -1)
         clipboard.store()
 
     def copy_image(self, button):

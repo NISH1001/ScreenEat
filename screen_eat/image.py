@@ -6,6 +6,12 @@ gi.require_version("Gtk", "3.0")  # NOQA -- disable pep8 E402 warning
 from gi.repository import GdkPixbuf
 
 
+try:
+    from PIL import Image as Pilgrimage  # :D
+except:
+    print("pillow not found. OCR wont't work")
+
+
 class Image:
     """Image representing a pixel buffer."""
 
@@ -70,3 +76,17 @@ class Image:
         self.pixbuf = scaled_pb
 
         return self
+
+    @property
+    def as_rgb(self):
+        """Convert gdkpixbuf to PIL image"""
+        pix = self.pixbuf
+        data = pix.get_pixels()
+        w = pix.props.width
+        h = pix.props.height
+        stride = pix.props.rowstride
+        mode = "RGB"
+        if pix.props.has_alpha == True:
+            mode = "RGBA"
+        im = Pilgrimage.frombytes(mode, (w, h), data, "raw", mode, stride)
+        return im
