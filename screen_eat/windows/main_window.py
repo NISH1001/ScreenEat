@@ -14,8 +14,11 @@ from screen_eat.windows.crop_window import CropWindow
 
 try:
     from screen_eat import ocr
-except ImportError as e:
+
+    OCR = True
+except Exception as e:
     print(str(e))
+    OCR = False
 
 
 class MainWindow:
@@ -202,8 +205,10 @@ class MainWindow:
             Else, empty text is stored
         """
         clipboard = Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)
-        if not self.ocr_text:
-            self.ocr_text = ocr.image_to_text(self.image.as_rgb)
+        mode = self.config.data.get("ocrmode", 0)
+        mode = "easyocr" if mode == 1 else "pytesseract"
+        if not self.ocr_text and OCR:
+            self.ocr_text = ocr.image_to_text(self.image.as_rgb, mode=mode)
         clipboard.set_text(self.ocr_text, -1)
         clipboard.store()
 
@@ -253,6 +258,11 @@ class MainWindow:
         if authmode != "":
             authmode_combo.set_active(authmode)
 
+        ocrmode_combo = self.builder.get_object("ocrmode_combo")
+        ocrmode = self.config.data.get("ocrmode", "0")
+        if ocrmode:
+            ocrmode_combo.set_active(authmode)
+
         autocopy_check = self.builder.get_object("autocopy_check")
         autocopy_check.set_active(self.config.data["autocopy"])
 
@@ -281,6 +291,7 @@ class MainWindow:
             self.config.data["autocopy"] = autocopy_check.get_active()
             self.config.data["autoimagecopy"] = autoimagecopy_check.get_active()
             self.config.data["quality"] = image_quality.get_text()
+            self.config.data["ocrmode"] = ocrmode_combo.get_active()
             self.config.save()
 
         dialog.hide()

@@ -106,7 +106,12 @@ Anonymous user without user authorization   | Upload public snapshots anonymousl
 ---
 
 ## OCR
-Currently it uses **pytesseract**. You might have conflicts over the environment.  
+By default,  it uses [pytesseract](https://github.com/madmaze/pytesseract) which is lightweight.
+But there's an option for [easyocr](https://github.com/JaidedAI/EasyOCR) which is a bit heavy. So beware while using easyocr.  
+
+> **Note**: If easyocr is enabled in the config but can't be imported, then it will fallback to tesseract.
+
+You might have conflicts over the environment.  
 Make sure you try installing using default `pip` (which might come with anaconda) or `/usr/bin/pip3`.  
 
 The UI will have an OCR button. If OCR works, you can directly paste the extracted text.

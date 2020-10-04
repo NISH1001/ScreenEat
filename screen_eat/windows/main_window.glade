@@ -364,6 +364,7 @@
                 <property name="margin_bottom">8</property>
                 <property name="orientation">vertical</property>
                 <property name="spacing">8</property>
+
                 <child>
                   <object class="GtkComboBoxText" id="authmode_combo">
                     <property name="visible">True</property>
@@ -388,6 +389,33 @@
                     <property name="position">0</property>
                   </packing>
                 </child>
+
+
+                <child>
+                  <object class="GtkComboBoxText" id="ocrmode_combo">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="tearoff_title" translatable="yes">Select OCR Mode</property>
+                    <property name="has_entry">True</property>
+                    <property name="popup_fixed_width">False</property>
+                    <items>
+                      <item id="0" translatable="yes">pytesseract</item>
+                      <item id="1" translatable="yes">easyocr</item>
+                    </items>
+                    <child internal-child="entry">
+                      <object class="GtkEntry">
+                        <property name="can_focus">True</property>
+                        <property name="placeholder_text" translatable="yes">Select OCR Method</property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
+
                 <child>
                   <object class="GtkCheckButton" id="autoupload_check">
                     <property name="label" translatable="yes">Automatic upload</property>
