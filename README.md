@@ -109,7 +109,7 @@ Anonymous user without user authorization   | Upload public snapshots anonymousl
 Currently it uses **pytesseract**. You might have conflicts over the environment.  
 Make sure you try installing using default `pip` (which might come with anaconda) or `/usr/bin/pip3`.  
 
-The UI will have an OCR button. If OCR works, you should can directly paste the extracted text.
+The UI will have an OCR button. If OCR works, you can directly paste the extracted text.
 Else, it will have nothing in the clipboard.
 
 
