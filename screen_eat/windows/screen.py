@@ -13,6 +13,7 @@ class Screen:
         self.screen = Gdk.Screen.get_default()
         self.root_window = self.screen.get_root_window()
         active_window = self.screen.get_active_window()
+        # active_window = self.root_window
 
         monitor = self.screen.get_monitor_at_window(active_window)
         self.area = self.screen.get_monitor_geometry(monitor)

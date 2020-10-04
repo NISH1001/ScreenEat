@@ -14,8 +14,8 @@ from screen_eat.windows.crop_window import CropWindow
 
 try:
     from screen_eat import ocr
-except ImportError:
-    pass
+except ImportError as e:
+    print(str(e))
 
 
 class MainWindow:
